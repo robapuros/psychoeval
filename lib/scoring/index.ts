@@ -2,20 +2,16 @@
 
 export * from './types';
 
-// Export simple scoring functions
-export { scorePHQ9 } from './phq9-simple';
-export { scoreGAD7 } from './gad7-simple';
+// Export scoring functions
+export { scorePHQ9 } from './phq9';
+export { scoreGAD7 } from './gad7';
 export { scorePCL5 } from './pcl5';
 export { scoreAUDIT } from './audit';
 export { scoreMEC } from './mec';
 
-// Legacy exports (class-based scorers)
-export * from './phq9';
-export * from './gad7';
-
 // Convenience function to get scoring function by instrument type
-import { scorePHQ9 } from './phq9-simple';
-import { scoreGAD7 } from './gad7-simple';
+import { scorePHQ9 } from './phq9';
+import { scoreGAD7 } from './gad7';
 import { scorePCL5 } from './pcl5';
 import { scoreAUDIT } from './audit';
 import { scoreMEC } from './mec';

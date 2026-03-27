@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
-import { authConfig } from '@/lib/auth/config';
+import { authOptions } from '@/lib/auth/config';
 import { prisma } from '@/lib/prisma';
 import { nanoid } from 'nanoid';
 
@@ -17,7 +17,7 @@ import { nanoid } from 'nanoid';
 export async function POST(request: NextRequest) {
   try {
     // Verificar autenticación
-    const session = await getServerSession(authConfig);
+    const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
       return NextResponse.json(
         { error: 'No autorizado' },

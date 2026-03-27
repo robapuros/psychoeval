@@ -1,76 +1,52 @@
-import { ScoringEngine, Response, ScoringResult, SeverityLevel } from './types';
+import type { ScoringResult, QuestionResponse } from './types';
 
 /**
- * GAD-7 Scoring Engine
- * Generalized Anxiety Disorder 7-item scale
- * 
- * Scoring:
- * - 7 questions, each scored 0-3
- * - Total range: 0-21
- * - No specific critical items (unlike PHQ-9)
- * 
- * Severity Levels:
- * - Minimal: 0-4
- * - Mild: 5-9
- * - Moderate: 10-14
- * - Severe: 15-21
+ * Calcula puntuación GAD-7 (Ansiedad)
+ * Rango: 0-21 puntos
  */
-export class GAD7Scorer extends ScoringEngine {
-  private static readonly QUESTION_COUNT = 7;
-
-  calculate(responses: Response[]): ScoringResult {
-    // Validate responses
-    this.validateResponses(responses, GAD7Scorer.QUESTION_COUNT);
-
-    // Calculate total score
-    const totalScore = responses.reduce((sum, r) => sum + r.value, 0);
-
-    // Determine severity
-    const { label, color } = this.determineSeverity(totalScore);
-
-    // Check for critical items (GAD-7 has none by default)
-    const criticalItems = this.getCriticalItems(responses);
-    const hasCriticalItem = criticalItems.length > 0;
-
-    // Generate interpretation
-    const interpretation = this.getInterpretation(label);
-
-    return {
-      totalScore,
-      severity: label,
-      severityColor: color,
-      hasCriticalItem,
-      criticalItems: hasCriticalItem ? criticalItems : undefined,
-      interpretation,
-    };
+export function scoreGAD7(responses: QuestionResponse[]): ScoringResult {
+  if (responses.length !== 7) {
+    throw new Error('GAD-7 requires exactly 7 responses');
   }
 
-  protected getSeverityLevels(): SeverityLevel[] {
-    return [
-      { label: 'Minimal', min: 0, max: 4, color: 'green' },
-      { label: 'Mild', min: 5, max: 9, color: 'yellow' },
-      { label: 'Moderate', min: 10, max: 14, color: 'orange' },
-      { label: 'Severe', min: 15, max: 21, color: 'red' },
-    ];
+  // Validar que todas las respuestas estén en rango 0-3
+  const invalidResponses = responses.filter(r => r.value < 0 || r.value > 3);
+  if (invalidResponses.length > 0) {
+    throw new Error(`Invalid response values. GAD-7 responses must be between 0-3`);
   }
 
-  protected getCriticalItems(responses: Response[]): number[] {
-    // GAD-7 does not have specific critical items
-    // Could be extended to flag very high individual item scores
-    return [];
+  // Calcular puntuación total
+  const totalScore = responses.reduce((sum, response) => sum + response.value, 0);
+
+  // Determinar severidad
+  let severity: string;
+  let severityLabel: string;
+  let recommendation: string;
+
+  if (totalScore <= 4) {
+    severity = 'Mínima';
+    severityLabel = 'Ansiedad mínima';
+    recommendation = 'No requiere intervención';
+  } else if (totalScore <= 9) {
+    severity = 'Leve';
+    severityLabel = 'Ansiedad leve';
+    recommendation = 'Seguimiento, técnicas de relajación';
+  } else if (totalScore <= 14) {
+    severity = 'Moderada';
+    severityLabel = 'Ansiedad moderada';
+    recommendation = 'Probable TAG, considerar tratamiento';
+  } else {
+    severity = 'Severa';
+    severityLabel = 'Ansiedad severa';
+    recommendation = 'TAG activo, tratamiento recomendado';
   }
 
-  private getInterpretation(severity: string): string {
-    const interpretations: Record<string, string> = {
-      'Minimal': 'Minimal anxiety symptoms.',
-      'Mild': 'Mild anxiety. Monitor symptoms and consider lifestyle interventions.',
-      'Moderate': 'Moderate anxiety. Treatment should be considered.',
-      'Severe': 'Severe anxiety. Active treatment is strongly recommended.',
-    };
-
-    return interpretations[severity] || '';
-  }
+  return {
+    totalScore,
+    minScore: 0,
+    maxScore: 21,
+    severity,
+    severityLabel,
+    recommendation,
+  };
 }
-
-// Export singleton instance
-export const gad7Scorer = new GAD7Scorer();

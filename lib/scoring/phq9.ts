@@ -1,91 +1,73 @@
-import { ScoringEngine, Response, ScoringResult, SeverityLevel } from './types';
+import type { ScoringResult, QuestionResponse } from './types';
 
-/**
- * PHQ-9 Scoring Engine
- * Patient Health Questionnaire for Depression
- * 
- * Scoring:
- * - 9 questions, each scored 0-3
- * - Total range: 0-27
- * - Question 9 is critical (suicidal ideation)
- * 
- * Severity Levels:
- * - None: 0-4
- * - Mild: 5-9
- * - Moderate: 10-14
- * - Moderately Severe: 15-19
- * - Severe: 20-27
- */
-export class PHQ9Scorer extends ScoringEngine {
-  private static readonly QUESTION_COUNT = 9;
-  private static readonly CRITICAL_QUESTION = 9; // Suicidal ideation
-
-  calculate(responses: Response[]): ScoringResult {
-    // Validate responses
-    this.validateResponses(responses, PHQ9Scorer.QUESTION_COUNT);
-
-    // Calculate total score
-    const totalScore = responses.reduce((sum, r) => sum + r.value, 0);
-
-    // Determine severity
-    const { label, color } = this.determineSeverity(totalScore);
-
-    // Check for critical items
-    const criticalItems = this.getCriticalItems(responses);
-    const hasCriticalItem = criticalItems.length > 0;
-
-    // Generate interpretation
-    const interpretation = this.getInterpretation(label, hasCriticalItem);
-
-    return {
-      totalScore,
-      severity: label,
-      severityColor: color,
-      hasCriticalItem,
-      criticalItems: hasCriticalItem ? criticalItems : undefined,
-      interpretation,
-    };
-  }
-
-  protected getSeverityLevels(): SeverityLevel[] {
-    return [
-      { label: 'None', min: 0, max: 4, color: 'green' },
-      { label: 'Mild', min: 5, max: 9, color: 'yellow' },
-      { label: 'Moderate', min: 10, max: 14, color: 'orange' },
-      { label: 'Moderately Severe', min: 15, max: 19, color: 'red' },
-      { label: 'Severe', min: 20, max: 27, color: 'red' },
-    ];
-  }
-
-  protected getCriticalItems(responses: Response[]): number[] {
-    const q9 = responses.find(r => r.questionNumber === PHQ9Scorer.CRITICAL_QUESTION);
-    
-    // Question 9 (suicidal ideation) is critical if value > 0
-    if (q9 && q9.value > 0) {
-      return [PHQ9Scorer.CRITICAL_QUESTION];
-    }
-
-    return [];
-  }
-
-  private getInterpretation(severity: string, hasCriticalItem: boolean): string {
-    const interpretations: Record<string, string> = {
-      'None': 'Minimal or no depression symptoms.',
-      'Mild': 'Mild depression. Monitor symptoms and consider follow-up.',
-      'Moderate': 'Moderate depression. Treatment should be considered.',
-      'Moderately Severe': 'Moderately severe depression. Active treatment is recommended.',
-      'Severe': 'Severe depression. Immediate treatment is strongly recommended.',
-    };
-
-    let interpretation = interpretations[severity] || '';
-
-    if (hasCriticalItem) {
-      interpretation += ' ⚠️ CRITICAL: Suicidal ideation detected. Immediate clinical assessment recommended.';
-    }
-
-    return interpretation;
-  }
+export interface PHQ9Result extends ScoringResult {
+  hasCriticalItem: boolean;
+  criticalItems: number[];
 }
 
-// Export singleton instance
-export const phq9Scorer = new PHQ9Scorer();
+/**
+ * Calcula puntuación PHQ-9 (Depresión)
+ * Rango: 0-27 puntos
+ */
+export function scorePHQ9(responses: QuestionResponse[]): PHQ9Result {
+  if (responses.length !== 9) {
+    throw new Error('PHQ-9 requires exactly 9 responses');
+  }
+
+  // Validar que todas las respuestas estén en rango 0-3
+  const invalidResponses = responses.filter(r => r.value < 0 || r.value > 3);
+  if (invalidResponses.length > 0) {
+    throw new Error(`Invalid response values. PHQ-9 responses must be between 0-3`);
+  }
+
+  // Calcular puntuación total
+  const totalScore = responses.reduce((sum, response) => sum + response.value, 0);
+
+  // Determinar severidad
+  let severity: string;
+  let severityLabel: string;
+  let recommendation: string;
+
+  if (totalScore <= 4) {
+    severity = 'Mínima';
+    severityLabel = 'Sin depresión o depresión mínima';
+    recommendation = 'No requiere intervención';
+  } else if (totalScore <= 9) {
+    severity = 'Leve';
+    severityLabel = 'Depresión leve';
+    recommendation = 'Seguimiento, considerar psicoterapia';
+  } else if (totalScore <= 14) {
+    severity = 'Moderada';
+    severityLabel = 'Depresión moderada';
+    recommendation = 'Psicoterapia y/o farmacoterapia';
+  } else if (totalScore <= 19) {
+    severity = 'Moderadamente severa';
+    severityLabel = 'Depresión moderadamente severa';
+    recommendation = 'Tratamiento activo con psicoterapia y farmacoterapia';
+  } else {
+    severity = 'Severa';
+    severityLabel = 'Depresión severa';
+    recommendation = 'Tratamiento inmediato, considerar intervención intensiva';
+  }
+
+  // Detectar ítems críticos (pregunta 9: ideación suicida)
+  const criticalItems: number[] = [];
+  const q9 = responses.find(r => r.questionNumber === 9);
+  const hasCriticalItem = q9 ? q9.value >= 1 : false;
+  
+  if (hasCriticalItem) {
+    criticalItems.push(9);
+    recommendation += ' | ⚠️ ALERTA: Ideación suicida detectada. Requiere evaluación inmediata.';
+  }
+
+  return {
+    totalScore,
+    minScore: 0,
+    maxScore: 27,
+    severity,
+    severityLabel,
+    recommendation,
+    hasCriticalItem,
+    criticalItems,
+  };
+}
