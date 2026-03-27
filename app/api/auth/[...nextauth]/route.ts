@@ -1,6 +1,10 @@
 import NextAuth from 'next-auth';
 import { authOptions } from '@/lib/auth/config';
 
+// Force dynamic rendering (no static generation at build time)
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };

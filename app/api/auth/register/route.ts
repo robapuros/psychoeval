@@ -3,6 +3,10 @@ import { hash } from 'bcryptjs';
 import { db } from '@/lib/db/client';
 import { z } from 'zod';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 const registerSchema = z.object({
   email: z.string().email('Invalid email address'),
   password: z
