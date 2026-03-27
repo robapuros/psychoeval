@@ -13,7 +13,7 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          throw new Error('Email and password required');
+          throw new Error('Email y contraseña requeridos');
         }
 
         const professional = await db.professional.findUnique({
@@ -21,19 +21,20 @@ export const authOptions: NextAuthOptions = {
         });
 
         if (!professional) {
-          throw new Error('Invalid email or password');
+          throw new Error('Email o contraseña incorrectos');
         }
 
         const isValid = await compare(credentials.password, professional.password_hash);
 
         if (!isValid) {
-          throw new Error('Invalid email or password');
+          throw new Error('Email o contraseña incorrectos');
         }
 
         return {
           id: professional.id,
           email: professional.email,
           name: professional.name,
+          role: professional.role,
         };
       },
     }),
@@ -50,12 +51,14 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.role = user.role;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
+        session.user.role = token.role as 'ADMIN' | 'PROFESSIONAL';
       }
       return session;
     },

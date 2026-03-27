@@ -10,12 +10,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Role Types
+enum Role {
+  ADMIN        // Can create professionals
+  PROFESSIONAL // Can create patients and assessments
+}
+
 // Professional (Psychologist, Therapist, etc.)
 model Professional {
   id             String   @id @default(uuid())
   email          String   @unique
   password_hash  String
   name           String
+  role           Role     @default(PROFESSIONAL)
   specialty      String?
   license_number String?
   created_at     DateTime @default(now())
