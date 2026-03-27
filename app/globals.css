@@ -1,71 +1,257 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --primary: #2563EB;
-  --success: #10B981;
-  --warning: #F59E0B;
-  --danger: #EF4444;
-  --bg: #FFFFFF;
-  --text: #1F2937;
+  /* Blues - Primary */
+  --b50: #E6F1FB;
+  --b100: #B5D4F4;
+  --b200: #85B7EB;
+  --b400: #378ADD;
+  --b600: #185FA5;
+  --b800: #0C447C;
+  --b900: #042C53;
+  
+  /* Teals - Success */
+  --t50: #E1F5EE;
+  --t400: #1D9E75;
+  --t600: #0F6E56;
+  --t800: #085041;
+  
+  /* Ambers - Warning */
+  --a50: #FAEEDA;
+  --a400: #BA7517;
+  --a600: #854F0B;
+  
+  /* Reds - Danger/Critical */
+  --r50: #FCEBEB;
+  --r100: #F7C1C1;
+  --r400: #E24B4A;
+  --r600: #A32D2D;
+  
+  /* Greens - Low severity */
+  --g50: #EAF3DE;
+  --g600: #3B6D11;
+  
+  /* Stone/Neutrals */
+  --s0: #F1EFE8;
+  --s100: #D3D1C7;
+  --s400: #888780;
+  --s600: #5F5E5A;
+  --s800: #444441;
+  
+  /* Surfaces */
+  --bg: #F7F6F3;
+  --surf: #FFFFFF;
+  --surf2: #F1EFE8;
+  
+  /* Borders */
+  --bd: rgba(0, 0, 0, 0.08);
+  --bds: rgba(0, 0, 0, 0.13);
+  
+  /* Text */
+  --tx: #1A1917;
+  --tx2: #5F5E5A;
+  --tx3: #888780;
+  
+  /* Border radius */
+  --r: 8px;
+  --rl: 12px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #111827;
-    --text: #F9FAFB;
-  }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  color: var(--text);
+  font-family: 'Sora', -apple-system, sans-serif;
   background: var(--bg);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--tx);
+  font-size: 13px;
+  line-height: 1.45;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+.mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Severity badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 7px;
+  border-radius: 20px;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.badge-green {
+  background: var(--g50);
+  color: var(--g600);
+}
+
+.badge-yellow {
+  background: var(--a50);
+  color: var(--a600);
+}
+
+.badge-orange {
+  background: var(--a50);
+  color: var(--a600);
+}
+
+.badge-red {
+  background: var(--r50);
+  color: var(--r600);
+}
+
+.badge-teal {
+  background: var(--t50);
+  color: var(--t600);
+}
+
+.badge-blue {
+  background: var(--b50);
+  color: var(--b600);
+}
+
+/* Critical alert */
+.critical-alert {
+  background: var(--r50);
+  border: 1px solid var(--r100);
+  border-radius: var(--r);
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.alert-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--r400);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.3);
   }
 }
 
-/* Severity color coding */
-.severity-green {
-  @apply bg-green-100 text-green-800 border-green-300;
-}
-
-.severity-yellow {
-  @apply bg-yellow-100 text-yellow-800 border-yellow-300;
-}
-
-.severity-orange {
-  @apply bg-orange-100 text-orange-800 border-orange-300;
-}
-
-.severity-red {
-  @apply bg-red-100 text-red-800 border-red-300;
-}
-
-/* Critical item alert */
-.critical-alert {
-  @apply bg-red-50 border-l-4 border-red-500 p-4 text-red-900;
-}
-
 /* Patient questionnaire */
-.question-card {
-  @apply bg-white rounded-lg shadow-md p-6 border border-gray-200;
-}
-
 .option-button {
-  @apply w-full p-4 text-left rounded-lg border-2 border-gray-200 hover:border-blue-500 hover:bg-blue-50 transition-all cursor-pointer;
+  width: 100%;
+  padding: 10px 12px;
+  text-align: left;
+  border: 1px solid var(--bds);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.12s;
+  font-size: 12px;
+  color: var(--tx);
+  background: var(--surf);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.option-button-selected {
-  @apply border-blue-500 bg-blue-50;
+.option-button:hover {
+  border-color: var(--b400);
+  background: var(--b50);
+}
+
+.option-button.selected {
+  border-color: var(--b600);
+  background: var(--b50);
+}
+
+.option-button.selected .option-text {
+  color: var(--b800);
+  font-weight: 600;
+}
+
+.option-score {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--tx3);
+  background: var(--surf2);
+  padding: 1px 5px;
+  border-radius: 3px;
 }
 
 /* Progress bar */
-.progress-bar {
-  @apply h-2 bg-blue-500 rounded-full transition-all duration-300;
+.progress-track {
+  height: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 3px;
+  background: var(--t400);
+  border-radius: 2px;
+  transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Wizard steps */
+.wizard-step {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 700;
+  transition: all 0.2s;
+}
+
+.wizard-step.done {
+  background: var(--t400);
+  color: white;
+}
+
+.wizard-step.active {
+  background: var(--b600);
+  color: white;
+  box-shadow: 0 0 0 3px rgba(24, 95, 165, 0.12);
+}
+
+.wizard-step.pending {
+  background: var(--surf2);
+  color: var(--tx3);
+  border: 1px solid var(--bds);
+}
+
+.wizard-line {
+  height: 1px;
+  flex: 1;
+  background: var(--bd);
+  transition: background 0.3s;
+}
+
+.wizard-line.done {
+  background: var(--t400);
+}
+
+/* Uppercase labels */
+.label-upper {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--tx3);
 }
