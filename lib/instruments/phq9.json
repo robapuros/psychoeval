@@ -1,0 +1,113 @@
+{
+  "id": "PHQ9",
+  "name": "Patient Health Questionnaire-9",
+  "shortName": "PHQ-9",
+  "category": "Depression",
+  "description": "A 9-item depression screening tool based on DSM-IV criteria",
+  "timeEstimate": "2-3 minutes",
+  "questions": [
+    {
+      "number": 1,
+      "text": "Little interest or pleasure in doing things",
+      "options": [
+        { "value": 0, "label": "Not at all" },
+        { "value": 1, "label": "Several days" },
+        { "value": 2, "label": "More than half the days" },
+        { "value": 3, "label": "Nearly every day" }
+      ]
+    },
+    {
+      "number": 2,
+      "text": "Feeling down, depressed, or hopeless",
+      "options": [
+        { "value": 0, "label": "Not at all" },
+        { "value": 1, "label": "Several days" },
+        { "value": 2, "label": "More than half the days" },
+        { "value": 3, "label": "Nearly every day" }
+      ]
+    },
+    {
+      "number": 3,
+      "text": "Trouble falling or staying asleep, or sleeping too much",
+      "options": [
+        { "value": 0, "label": "Not at all" },
+        { "value": 1, "label": "Several days" },
+        { "value": 2, "label": "More than half the days" },
+        { "value": 3, "label": "Nearly every day" }
+      ]
+    },
+    {
+      "number": 4,
+      "text": "Feeling tired or having little energy",
+      "options": [
+        { "value": 0, "label": "Not at all" },
+        { "value": 1, "label": "Several days" },
+        { "value": 2, "label": "More than half the days" },
+        { "value": 3, "label": "Nearly every day" }
+      ]
+    },
+    {
+      "number": 5,
+      "text": "Poor appetite or overeating",
+      "options": [
+        { "value": 0, "label": "Not at all" },
+        { "value": 1, "label": "Several days" },
+        { "value": 2, "label": "More than half the days" },
+        { "value": 3, "label": "Nearly every day" }
+      ]
+    },
+    {
+      "number": 6,
+      "text": "Feeling bad about yourself — or that you are a failure or have let yourself or your family down",
+      "options": [
+        { "value": 0, "label": "Not at all" },
+        { "value": 1, "label": "Several days" },
+        { "value": 2, "label": "More than half the days" },
+        { "value": 3, "label": "Nearly every day" }
+      ]
+    },
+    {
+      "number": 7,
+      "text": "Trouble concentrating on things, such as reading the newspaper or watching television",
+      "options": [
+        { "value": 0, "label": "Not at all" },
+        { "value": 1, "label": "Several days" },
+        { "value": 2, "label": "More than half the days" },
+        { "value": 3, "label": "Nearly every day" }
+      ]
+    },
+    {
+      "number": 8,
+      "text": "Moving or speaking so slowly that other people could have noticed. Or the opposite — being so fidgety or restless that you have been moving around a lot more than usual",
+      "options": [
+        { "value": 0, "label": "Not at all" },
+        { "value": 1, "label": "Several days" },
+        { "value": 2, "label": "More than half the days" },
+        { "value": 3, "label": "Nearly every day" }
+      ]
+    },
+    {
+      "number": 9,
+      "text": "Thoughts that you would be better off dead, or of hurting yourself in some way",
+      "options": [
+        { "value": 0, "label": "Not at all" },
+        { "value": 1, "label": "Several days" },
+        { "value": 2, "label": "More than half the days" },
+        { "value": 3, "label": "Nearly every day" }
+      ],
+      "critical": true,
+      "criticalThreshold": 1
+    }
+  ],
+  "scoring": {
+    "method": "sum",
+    "range": { "min": 0, "max": 27 },
+    "severityLevels": [
+      { "label": "None", "min": 0, "max": 4, "color": "green" },
+      { "label": "Mild", "min": 5, "max": 9, "color": "yellow" },
+      { "label": "Moderate", "min": 10, "max": 14, "color": "orange" },
+      { "label": "Moderately Severe", "min": 15, "max": 19, "color": "red" },
+      { "label": "Severe", "min": 20, "max": 27, "color": "red" }
+    ]
+  }
+}

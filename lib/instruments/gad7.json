@@ -1,0 +1,90 @@
+{
+  "id": "GAD7",
+  "name": "Generalized Anxiety Disorder 7-item scale",
+  "shortName": "GAD-7",
+  "category": "Anxiety",
+  "description": "A 7-item anxiety screening tool",
+  "timeEstimate": "2 minutes",
+  "questions": [
+    {
+      "number": 1,
+      "text": "Feeling nervous, anxious, or on edge",
+      "options": [
+        { "value": 0, "label": "Not at all" },
+        { "value": 1, "label": "Several days" },
+        { "value": 2, "label": "More than half the days" },
+        { "value": 3, "label": "Nearly every day" }
+      ]
+    },
+    {
+      "number": 2,
+      "text": "Not being able to stop or control worrying",
+      "options": [
+        { "value": 0, "label": "Not at all" },
+        { "value": 1, "label": "Several days" },
+        { "value": 2, "label": "More than half the days" },
+        { "value": 3, "label": "Nearly every day" }
+      ]
+    },
+    {
+      "number": 3,
+      "text": "Worrying too much about different things",
+      "options": [
+        { "value": 0, "label": "Not at all" },
+        { "value": 1, "label": "Several days" },
+        { "value": 2, "label": "More than half the days" },
+        { "value": 3, "label": "Nearly every day" }
+      ]
+    },
+    {
+      "number": 4,
+      "text": "Trouble relaxing",
+      "options": [
+        { "value": 0, "label": "Not at all" },
+        { "value": 1, "label": "Several days" },
+        { "value": 2, "label": "More than half the days" },
+        { "value": 3, "label": "Nearly every day" }
+      ]
+    },
+    {
+      "number": 5,
+      "text": "Being so restless that it is hard to sit still",
+      "options": [
+        { "value": 0, "label": "Not at all" },
+        { "value": 1, "label": "Several days" },
+        { "value": 2, "label": "More than half the days" },
+        { "value": 3, "label": "Nearly every day" }
+      ]
+    },
+    {
+      "number": 6,
+      "text": "Becoming easily annoyed or irritable",
+      "options": [
+        { "value": 0, "label": "Not at all" },
+        { "value": 1, "label": "Several days" },
+        { "value": 2, "label": "More than half the days" },
+        { "value": 3, "label": "Nearly every day" }
+      ]
+    },
+    {
+      "number": 7,
+      "text": "Feeling afraid, as if something awful might happen",
+      "options": [
+        { "value": 0, "label": "Not at all" },
+        { "value": 1, "label": "Several days" },
+        { "value": 2, "label": "More than half the days" },
+        { "value": 3, "label": "Nearly every day" }
+      ]
+    }
+  ],
+  "scoring": {
+    "method": "sum",
+    "range": { "min": 0, "max": 21 },
+    "severityLevels": [
+      { "label": "Minimal", "min": 0, "max": 4, "color": "green" },
+      { "label": "Mild", "min": 5, "max": 9, "color": "yellow" },
+      { "label": "Moderate", "min": 10, "max": 14, "color": "orange" },
+      { "label": "Severe", "min": 15, "max": 21, "color": "red" }
+    ]
+  }
+}
