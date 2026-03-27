@@ -1,6 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { scoreInstrument, type QuestionResponse } from '@/lib/scoring';
+import {
+  sendAssessmentCompleted,
+  sendCriticalAlert,
+  getSeverityColor,
+  getCriticalAlertMessage,
+} from '@/lib/email/send';
+import phq9Data from '@/lib/instruments/phq9.json';
+import gad7Data from '@/lib/instruments/gad7.json';
+import pcl5Data from '@/lib/instruments/pcl5.json';
+import auditData from '@/lib/instruments/audit.json';
+import mecData from '@/lib/instruments/mec.json';
 
 /**
  * POST /api/assessments/[token]/submit
@@ -120,8 +131,63 @@ export async function POST(
       },
     });
 
-    // Aquí se podría enviar email al profesional
-    // TODO: Implementar notificaciones por email con Resend
+    // Obtener información del instrumento
+    const instrumentMap: Record<string, any> = {
+      PHQ9: phq9Data,
+      GAD7: gad7Data,
+      PCL5: pcl5Data,
+      AUDIT: auditData,
+      MEC: mecData,
+    };
+    const instrumentData = instrumentMap[assessment.instrumentType];
+    const maxScore = instrumentData.scoring.range.max;
+
+    // Construir URL de resultados
+    const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
+    const resultsUrl = `${baseUrl}/dashboard/patients/${assessment.patientId}/assessments/${token}`;
+
+    // Enviar notificaciones por email al profesional
+    if (assessment.professional.email && process.env.RESEND_API_KEY) {
+      try {
+        // Enviar notificación de evaluación completada
+        await sendAssessmentCompleted({
+          to: assessment.professional.email,
+          professionalName: assessment.professional.name || 'Profesional',
+          patientName: assessment.patient.fullName,
+          instrumentName: instrumentData.name,
+          score: scoringResult.totalScore,
+          maxScore,
+          severity: scoringResult.severity,
+          severityColor: getSeverityColor(scoringResult.severity),
+          hasCriticalAlert,
+          resultsUrl,
+        });
+        console.log(
+          `✅ Completion email sent to ${assessment.professional.email} for assessment ${token}`
+        );
+
+        // Si hay alerta crítica, enviar email urgente adicional
+        if (hasCriticalAlert) {
+          await sendCriticalAlert({
+            to: assessment.professional.email,
+            professionalName: assessment.professional.name || 'Profesional',
+            patientName: assessment.patient.fullName,
+            patientEmail: assessment.patient.email || undefined,
+            patientPhone: assessment.patient.phone || undefined,
+            instrumentName: instrumentData.name,
+            criticalItems,
+            alertMessage: getCriticalAlertMessage(assessment.instrumentType, criticalItems),
+            resultsUrl,
+          });
+          console.log(
+            `🚨 Critical alert email sent to ${assessment.professional.email} for assessment ${token}`
+          );
+        }
+      } catch (emailError) {
+        console.error('Failed to send email notifications:', emailError);
+        // No lanzar error, la evaluación ya fue guardada
+      }
+    }
 
     return NextResponse.json({
       success: true,

@@ -3,6 +3,12 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth/config';
 import { prisma } from '@/lib/prisma';
 import { nanoid } from 'nanoid';
+import { sendPatientInvitation } from '@/lib/email/send';
+import phq9Data from '@/lib/instruments/phq9.json';
+import gad7Data from '@/lib/instruments/gad7.json';
+import pcl5Data from '@/lib/instruments/pcl5.json';
+import auditData from '@/lib/instruments/audit.json';
+import mecData from '@/lib/instruments/mec.json';
 
 /**
  * POST /api/assessments/generate
@@ -105,8 +111,40 @@ export async function POST(request: NextRequest) {
     const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
     const assessmentUrl = `${baseUrl}/assess/${token}`;
 
+    // Obtener información del instrumento para el email
+    const instrumentMap: Record<string, any> = {
+      PHQ9: phq9Data,
+      GAD7: gad7Data,
+      PCL5: pcl5Data,
+      AUDIT: auditData,
+      MEC: mecData,
+    };
+    const instrumentData = instrumentMap[instrumentType];
+
+    // Enviar email al paciente si tiene dirección de correo
+    let emailSent = false;
+    if (patient.email && process.env.RESEND_API_KEY) {
+      try {
+        await sendPatientInvitation({
+          to: patient.email,
+          patientName: patient.fullName,
+          professionalName: patient.professional.name || 'Su profesional de salud',
+          instrumentName: instrumentData.name,
+          assessmentUrl,
+          expiresAt: assessment.expiresAt.toISOString(),
+        });
+        emailSent = true;
+        console.log(`✅ Email sent to ${patient.email} for assessment ${token}`);
+      } catch (emailError) {
+        console.error('Failed to send patient invitation email:', emailError);
+        // No lanzar error, continuar con la respuesta
+        // El enlace sigue siendo válido aunque el email falle
+      }
+    }
+
     return NextResponse.json({
       success: true,
+      emailSent,
       assessment: {
         id: assessment.id,
         token: assessment.token,

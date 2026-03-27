@@ -379,6 +379,7 @@ function SendAssessmentModal({
   const [selectedInstrument, setSelectedInstrument] = useState<string>('');
   const [generating, setGenerating] = useState(false);
   const [generatedLink, setGeneratedLink] = useState<string | null>(null);
+  const [emailSent, setEmailSent] = useState(false);
   const [error, setError] = useState('');
 
   const instruments = [
@@ -418,6 +419,7 @@ function SendAssessmentModal({
       }
 
       setGeneratedLink(data.assessment.url);
+      setEmailSent(data.emailSent || false);
     } catch (err) {
       setError('Error de conexión');
       setGenerating(false);
@@ -440,9 +442,19 @@ function SendAssessmentModal({
               <span className="text-[24px]">✓</span>
             </div>
             <h2 className="text-[16px] font-bold tracking-tight mb-2">Enlace generado</h2>
-            <p className="text-[11px] text-[#888780]">
-              Envía este enlace a <strong>{patient.fullName}</strong>
-            </p>
+            {emailSent ? (
+              <p className="text-[11px] text-[#3B6D11]">
+                ✉️ Email enviado a <strong>{patient.fullName}</strong>
+              </p>
+            ) : patient.email ? (
+              <p className="text-[11px] text-[#888780]">
+                ⚠️ No se pudo enviar email. Copia el enlace manualmente.
+              </p>
+            ) : (
+              <p className="text-[11px] text-[#888780]">
+                Envía este enlace a <strong>{patient.fullName}</strong>
+              </p>
+            )}
           </div>
 
           <div className="bg-[#F1EFE8] rounded-lg p-3 mb-4">
