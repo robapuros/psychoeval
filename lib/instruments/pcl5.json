@@ -1,0 +1,160 @@
+{
+  "id": "PCL5",
+  "name": "Lista de Verificación de TEPT para DSM-5",
+  "shortName": "PCL-5",
+  "category": "Trauma/TEPT",
+  "description": "Evaluación de síntomas de trastorno de estrés postraumático según criterios DSM-5. Mide la intensidad de síntomas relacionados con experiencias traumáticas en el último mes.",
+  "language": "es-ES",
+  "version": "1.0",
+  "source": "National Center for PTSD - Weathers et al. (2013)",
+  "validation": "Berlanga et al. (2018) - Validación española",
+  "timeEstimate": "5-7 minutos",
+  "instructions": "A continuación se presentan problemas que las personas a veces experimentan como respuesta a un evento muy estresante. Por favor, lea cada problema cuidadosamente y marque el número que indica cuánto le ha molestado ese problema durante el último mes.",
+  "responseOptions": [
+    { "value": 0, "label": "Nada" },
+    { "value": 1, "label": "Un poco" },
+    { "value": 2, "label": "Moderadamente" },
+    { "value": 3, "label": "Bastante" },
+    { "value": 4, "label": "Extremadamente" }
+  ],
+  "questions": [
+    {
+      "number": 1,
+      "text": "¿Recuerdos angustiantes, involuntarios y repetitivos del evento estresante?",
+      "category": "reexperimentacion",
+      "cluster": "B"
+    },
+    {
+      "number": 2,
+      "text": "¿Sueños angustiantes y repetitivos del evento estresante?",
+      "category": "reexperimentacion",
+      "cluster": "B"
+    },
+    {
+      "number": 3,
+      "text": "¿Sentir o actuar repentinamente como si el evento estresante estuviera ocurriendo de nuevo (como si lo estuviera reviviendo)?",
+      "category": "reexperimentacion",
+      "cluster": "B"
+    },
+    {
+      "number": 4,
+      "text": "¿Sentirse muy alterado/a cuando algo le recuerda el evento estresante?",
+      "category": "reexperimentacion",
+      "cluster": "B"
+    },
+    {
+      "number": 5,
+      "text": "¿Reacciones físicas intensas cuando algo le recuerda el evento estresante (por ejemplo, palpitaciones, dificultad para respirar, sudoración)?",
+      "category": "reexperimentacion",
+      "cluster": "B"
+    },
+    {
+      "number": 6,
+      "text": "¿Evitar recuerdos, pensamientos o sentimientos relacionados con el evento estresante?",
+      "category": "evitacion",
+      "cluster": "C"
+    },
+    {
+      "number": 7,
+      "text": "¿Evitar recordatorios externos del evento estresante (por ejemplo, personas, lugares, conversaciones, actividades, objetos o situaciones)?",
+      "category": "evitacion",
+      "cluster": "C"
+    },
+    {
+      "number": 8,
+      "text": "¿Problemas para recordar partes importantes del evento estresante?",
+      "category": "cognicion_emocion",
+      "cluster": "D"
+    },
+    {
+      "number": 9,
+      "text": "¿Creencias negativas intensas sobre usted mismo/a, otras personas o el mundo (por ejemplo, tener pensamientos como: 'Soy malo/a', 'Nadie es de fiar', 'El mundo es muy peligroso')?",
+      "category": "cognicion_emocion",
+      "cluster": "D"
+    },
+    {
+      "number": 10,
+      "text": "¿Culparse a sí mismo/a o culpar a otros del evento estresante o de lo que sucedió después?",
+      "category": "cognicion_emocion",
+      "cluster": "D"
+    },
+    {
+      "number": 11,
+      "text": "¿Emociones negativas intensas (por ejemplo, miedo, horror, enojo, culpa o vergüenza)?",
+      "category": "cognicion_emocion",
+      "cluster": "D"
+    },
+    {
+      "number": 12,
+      "text": "¿Pérdida de interés en actividades que solía disfrutar?",
+      "category": "cognicion_emocion",
+      "cluster": "D"
+    },
+    {
+      "number": 13,
+      "text": "¿Sentirse distante o alejado/a de otras personas?",
+      "category": "cognicion_emocion",
+      "cluster": "D"
+    },
+    {
+      "number": 14,
+      "text": "¿Problemas para experimentar emociones positivas (por ejemplo, incapacidad para sentir felicidad, satisfacción o amor)?",
+      "category": "cognicion_emocion",
+      "cluster": "D"
+    },
+    {
+      "number": 15,
+      "text": "¿Comportamiento irritable, arrebatos de enojo o actuar agresivamente?",
+      "category": "hiperactivacion",
+      "cluster": "E"
+    },
+    {
+      "number": 16,
+      "text": "¿Asumir demasiados riesgos o hacer cosas que podrían causarle daño?",
+      "category": "hiperactivacion",
+      "cluster": "E"
+    },
+    {
+      "number": 17,
+      "text": "¿Estar 'super-alerta', vigilante o en guardia?",
+      "category": "hiperactivacion",
+      "cluster": "E"
+    },
+    {
+      "number": 18,
+      "text": "¿Sentirse nervioso/a o sobresaltarse fácilmente?",
+      "category": "hiperactivacion",
+      "cluster": "E"
+    },
+    {
+      "number": 19,
+      "text": "¿Dificultad para concentrarse?",
+      "category": "hiperactivacion",
+      "cluster": "E"
+    },
+    {
+      "number": 20,
+      "text": "¿Problemas para conciliar el sueño o permanecer dormido/a?",
+      "category": "hiperactivacion",
+      "cluster": "E"
+    }
+  ],
+  "scoring": {
+    "method": "sum",
+    "range": { "min": 0, "max": 80 },
+    "interpretation": [
+      { "min": 0, "max": 30, "severity": "Sin TEPT", "label": "Sin síntomas significativos de TEPT", "color": "#3B6D11", "action": "No requiere intervención especializada" },
+      { "min": 31, "max": 45, "severity": "TEPT probable", "label": "Probable TEPT, síntomas moderados", "color": "#BA7517", "action": "Evaluación clínica recomendada" },
+      { "min": 46, "max": 80, "severity": "TEPT severo", "label": "TEPT severo, síntomas intensos", "color": "#E24B4A", "action": "Tratamiento especializado urgente" }
+    ],
+    "cutoffRecommendation": 33,
+    "cutoffDescription": "Puntuación ≥ 33 sugiere probable TEPT según criterios DSM-5",
+    "clusterScoring": {
+      "B": { "items": [1, 2, 3, 4, 5], "name": "Reexperimentación", "threshold": 1 },
+      "C": { "items": [6, 7], "name": "Evitación", "threshold": 1 },
+      "D": { "items": [8, 9, 10, 11, 12, 13, 14], "name": "Alteraciones cognitivas y emocionales", "threshold": 2 },
+      "E": { "items": [15, 16, 17, 18, 19, 20], "name": "Hiperactivación", "threshold": 2 }
+    },
+    "diagnosticCriteria": "Para diagnóstico provisional de TEPT: al menos 1 síntoma de reexperimentación (B), 1 de evitación (C), 2 de alteraciones cognitivas/emocionales (D), y 2 de hiperactivación (E), con puntuación ≥ 2 (moderada) en cada síntoma."
+  }
+}

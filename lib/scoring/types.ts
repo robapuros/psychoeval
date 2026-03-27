@@ -5,13 +5,23 @@ export interface Response {
   value: number;
 }
 
+export interface QuestionResponse {
+  questionNumber: number;
+  value: number;
+  critical?: boolean;
+}
+
 export interface ScoringResult {
   totalScore: number;
+  minScore: number;
+  maxScore: number;
   severity: string;
-  severityColor: string;
-  hasCriticalItem: boolean;
+  severityLabel: string;
+  recommendation: string;
+  severityColor?: string;
+  hasCriticalItem?: boolean;
   criticalItems?: number[];
-  interpretation: string;
+  interpretation?: string;
 }
 
 export interface SeverityLevel {

@@ -1,40 +1,49 @@
-import { ScoringEngine, Response, ScoringResult } from './types';
-import { phq9Scorer } from './phq9';
-import { gad7Scorer } from './gad7';
+// Central export for all scoring modules
 
 export * from './types';
-export { phq9Scorer } from './phq9';
-export { gad7Scorer } from './gad7';
 
-type InstrumentType = 'PHQ9' | 'GAD7' | 'PCL5' | 'AUDIT' | 'MMSE';
+// Export simple scoring functions
+export { scorePHQ9 } from './phq9-simple';
+export { scoreGAD7 } from './gad7-simple';
+export { scorePCL5 } from './pcl5';
+export { scoreAUDIT } from './audit';
+export { scoreMEC } from './mec';
 
-/**
- * Factory function to get the appropriate scorer for an instrument
- */
-export function getScorer(instrumentType: InstrumentType): ScoringEngine {
+// Legacy exports (class-based scorers)
+export * from './phq9';
+export * from './gad7';
+
+// Convenience function to get scoring function by instrument type
+import { scorePHQ9 } from './phq9-simple';
+import { scoreGAD7 } from './gad7-simple';
+import { scorePCL5 } from './pcl5';
+import { scoreAUDIT } from './audit';
+import { scoreMEC } from './mec';
+import type { QuestionResponse, ScoringResult } from './types';
+
+export type InstrumentType = 'PHQ9' | 'GAD7' | 'PCL5' | 'AUDIT' | 'MEC';
+
+export function getScorer(instrumentType: InstrumentType) {
   switch (instrumentType) {
     case 'PHQ9':
-      return phq9Scorer;
+      return scorePHQ9;
     case 'GAD7':
-      return gad7Scorer;
+      return scoreGAD7;
     case 'PCL5':
-      throw new Error('PCL5 scorer not yet implemented');
+      return scorePCL5;
     case 'AUDIT':
-      throw new Error('AUDIT scorer not yet implemented');
-    case 'MMSE':
-      throw new Error('MMSE scorer not yet implemented');
+      return scoreAUDIT;
+    case 'MEC':
+      return scoreMEC as any; // MEC tiene estructura diferente
     default:
       throw new Error(`Unknown instrument type: ${instrumentType}`);
   }
 }
 
-/**
- * Calculate score for any instrument
- */
-export function calculateScore(
+export function scoreInstrument(
   instrumentType: InstrumentType,
-  responses: Response[]
+  responses: QuestionResponse[]
 ): ScoringResult {
   const scorer = getScorer(instrumentType);
-  return scorer.calculate(responses);
+  return scorer(responses);
 }

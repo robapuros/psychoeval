@@ -1,0 +1,274 @@
+{
+  "id": "MEC",
+  "name": "Mini Examen Cognoscitivo",
+  "shortName": "MEC",
+  "category": "Evaluación Cognitiva",
+  "description": "Adaptación española del MMSE (Mini-Mental State Examination). Instrumento de cribado de deterioro cognitivo que evalúa orientación, memoria, atención, cálculo, lenguaje y habilidades visuoespaciales.",
+  "language": "es-ES",
+  "version": "1.0",
+  "source": "Lobo et al. (1979, 1999) - Adaptación española del MMSE de Folstein et al. (1975)",
+  "validation": "Validado en población española. Ampliamente usado en el Sistema Nacional de Salud",
+  "timeEstimate": "10-15 minutos",
+  "instructions": "Este test evalúa diferentes aspectos de la función cognitiva. Por favor, responda a las preguntas lo mejor que pueda. Algunas pueden parecer fáciles y otras más difíciles. No se preocupe, es normal.",
+  "administrationNotes": "Requiere administración presencial por profesional capacitado. Necesita papel, lápiz y reloj para algunas pruebas. No es auto-administrable.",
+  "notSelfAdministered": true,
+  "sections": [
+    {
+      "name": "Orientación Temporal",
+      "maxScore": 5,
+      "items": [
+        {
+          "number": 1,
+          "text": "¿En qué año estamos?",
+          "type": "open",
+          "correctAnswer": "current_year",
+          "points": 1
+        },
+        {
+          "number": 2,
+          "text": "¿En qué estación del año estamos?",
+          "type": "open",
+          "correctAnswer": "current_season",
+          "points": 1
+        },
+        {
+          "number": 3,
+          "text": "¿En qué día (del mes) estamos?",
+          "type": "open",
+          "correctAnswer": "current_day",
+          "points": 1
+        },
+        {
+          "number": 4,
+          "text": "¿Qué día de la semana es hoy?",
+          "type": "open",
+          "correctAnswer": "current_weekday",
+          "points": 1
+        },
+        {
+          "number": 5,
+          "text": "¿En qué mes estamos?",
+          "type": "open",
+          "correctAnswer": "current_month",
+          "points": 1
+        }
+      ]
+    },
+    {
+      "name": "Orientación Espacial",
+      "maxScore": 5,
+      "items": [
+        {
+          "number": 6,
+          "text": "¿En qué país estamos?",
+          "type": "open",
+          "correctAnswer": "España (o país actual)",
+          "points": 1
+        },
+        {
+          "number": 7,
+          "text": "¿En qué provincia/comunidad autónoma estamos?",
+          "type": "open",
+          "correctAnswer": "provincia_actual",
+          "points": 1
+        },
+        {
+          "number": 8,
+          "text": "¿En qué ciudad/pueblo estamos?",
+          "type": "open",
+          "correctAnswer": "ciudad_actual",
+          "points": 1
+        },
+        {
+          "number": 9,
+          "text": "¿En qué lugar estamos ahora? (hospital, centro de salud, domicilio...)",
+          "type": "open",
+          "correctAnswer": "lugar_actual",
+          "points": 1
+        },
+        {
+          "number": 10,
+          "text": "¿En qué planta/piso estamos?",
+          "type": "open",
+          "correctAnswer": "piso_actual",
+          "points": 1
+        }
+      ]
+    },
+    {
+      "name": "Memoria Inmediata (Fijación)",
+      "maxScore": 3,
+      "instruction": "Voy a decirle tres palabras. Repítalas después de mí y trate de recordarlas porque se las volveré a preguntar dentro de unos minutos.",
+      "items": [
+        {
+          "number": 11,
+          "text": "Repetir: PESETA - CABALLO - MANZANA",
+          "type": "memory_registration",
+          "words": ["PESETA", "CABALLO", "MANZANA"],
+          "points": 1,
+          "note": "1 punto por cada palabra correctamente repetida en el primer intento. Máximo 6 intentos para el aprendizaje."
+        }
+      ]
+    },
+    {
+      "name": "Atención y Cálculo",
+      "maxScore": 5,
+      "instruction": "Si tiene 30 pesetas y me va dando de 3 en 3, ¿cuántas le van quedando?",
+      "alternative": "Deletrear la palabra MUNDO al revés (O-D-N-U-M)",
+      "items": [
+        {
+          "number": 12,
+          "text": "30 - 3 = ?",
+          "type": "calculation",
+          "correctAnswer": 27,
+          "points": 1
+        },
+        {
+          "number": 13,
+          "text": "27 - 3 = ?",
+          "type": "calculation",
+          "correctAnswer": 24,
+          "points": 1
+        },
+        {
+          "number": 14,
+          "text": "24 - 3 = ?",
+          "type": "calculation",
+          "correctAnswer": 21,
+          "points": 1
+        },
+        {
+          "number": 15,
+          "text": "21 - 3 = ?",
+          "type": "calculation",
+          "correctAnswer": 18,
+          "points": 1
+        },
+        {
+          "number": 16,
+          "text": "18 - 3 = ?",
+          "type": "calculation",
+          "correctAnswer": 15,
+          "points": 1
+        }
+      ]
+    },
+    {
+      "name": "Memoria Diferida (Recuerdo)",
+      "maxScore": 3,
+      "items": [
+        {
+          "number": 17,
+          "text": "¿Recuerda las tres palabras que le he dicho antes?",
+          "type": "memory_recall",
+          "words": ["PESETA", "CABALLO", "MANZANA"],
+          "points": 1,
+          "note": "1 punto por cada palabra recordada espontáneamente"
+        }
+      ]
+    },
+    {
+      "name": "Lenguaje y Construcción",
+      "maxScore": 9,
+      "items": [
+        {
+          "number": 18,
+          "text": "Mostrar un bolígrafo: ¿Qué es esto?",
+          "type": "naming",
+          "correctAnswer": "bolígrafo / pluma",
+          "points": 1
+        },
+        {
+          "number": 19,
+          "text": "Mostrar un reloj: ¿Qué es esto?",
+          "type": "naming",
+          "correctAnswer": "reloj",
+          "points": 1
+        },
+        {
+          "number": 20,
+          "text": "Repetir: NI SÍ, NI NO, NI PERO",
+          "type": "repetition",
+          "correctAnswer": "NI SÍ, NI NO, NI PERO",
+          "points": 1,
+          "note": "Debe ser exacta, sin errores"
+        },
+        {
+          "number": 21,
+          "text": "Orden de 3 pasos: Tome este papel con la mano derecha, dóblelo por la mitad y póngalo en el suelo",
+          "type": "three_step_command",
+          "steps": [
+            "Toma con mano derecha",
+            "Dobla por la mitad",
+            "Pone en el suelo"
+          ],
+          "points": 1,
+          "note": "1 punto por cada paso ejecutado correctamente (máximo 3)"
+        },
+        {
+          "number": 22,
+          "text": "Leer y obedecer: CIERRE LOS OJOS",
+          "type": "reading_command",
+          "correctAnswer": "Cierra los ojos",
+          "points": 1,
+          "note": "Mostrar tarjeta con 'CIERRE LOS OJOS' escrito"
+        },
+        {
+          "number": 23,
+          "text": "Escribir una frase completa (con sujeto y verbo)",
+          "type": "writing",
+          "points": 1,
+          "note": "Debe ser comprensible, con sujeto y verbo"
+        },
+        {
+          "number": 24,
+          "text": "Copiar el dibujo (dos pentágonos entrelazados)",
+          "type": "construction",
+          "points": 1,
+          "note": "Deben ser dos pentágonos y deben intersectarse"
+        }
+      ]
+    }
+  ],
+  "scoring": {
+    "method": "sum_sections",
+    "range": { "min": 0, "max": 30 },
+    "interpretation": [
+      { "min": 27, "max": 30, "severity": "Normal", "label": "Sin deterioro cognitivo", "color": "#3B6D11", "action": "No requiere intervención" },
+      { "min": 24, "max": 26, "severity": "Dudoso", "label": "Deterioro cognitivo dudoso", "color": "#BA7517", "action": "Reevaluar en 6 meses, considerar otras pruebas" },
+      { "min": 20, "max": 23, "severity": "Leve", "label": "Deterioro cognitivo leve", "color": "#BA7517", "action": "Evaluación neuropsicológica completa" },
+      { "min": 10, "max": 19, "severity": "Moderado", "label": "Deterioro cognitivo moderado", "color": "#E24B4A", "action": "Derivación a neurología, valorar inicio de tratamiento" },
+      { "min": 0, "max": 9, "severity": "Severo", "label": "Deterioro cognitivo severo", "color": "#A32D2D", "action": "Evaluación especializada urgente, soporte familiar" }
+    ],
+    "cutoffRecommendation": 24,
+    "cutoffDescription": "Puntuación < 24 sugiere deterioro cognitivo (ajustar por edad y nivel educativo)",
+    "adjustments": {
+      "age": {
+        "note": "El rendimiento puede disminuir ligeramente con la edad",
+        "65-79": "Normal: 24-30",
+        "80+": "Normal: 23-30"
+      },
+      "education": {
+        "note": "El nivel educativo influye en el rendimiento",
+        "sin_estudios": "Punto de corte: 23",
+        "primaria": "Punto de corte: 24",
+        "secundaria_superior": "Punto de corte: 27"
+      }
+    },
+    "limitations": [
+      "No es diagnóstico definitivo, es instrumento de cribado",
+      "Requiere administración por profesional entrenado",
+      "Puede estar influido por nivel educativo, edad y estado emocional",
+      "No detecta deterioro cognitivo muy leve",
+      "Complementar con historia clínica y otras pruebas"
+    ]
+  },
+  "materials_required": [
+    "Papel en blanco",
+    "Lápiz",
+    "Reloj de pulsera",
+    "Bolígrafo",
+    "Tarjeta con 'CIERRE LOS OJOS'",
+    "Dibujo de pentágonos entrelazados"
+  ]
+}

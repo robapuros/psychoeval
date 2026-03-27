@@ -29,12 +29,14 @@ export default withAuth(
 );
 
 // Protect both professional and admin routes
+// Exclude public assessment routes: /assess/* and GET /api/assessments/[token]
 export const config = {
   matcher: [
     '/dashboard/:path*',
     '/admin/:path*',
     '/api/professionals/:path*',
     '/api/patients/:path*',
-    '/api/assessments/:path*',
+    '/api/assessments/generate/:path*', // Solo ruta de generación requiere auth
+    '/api/admin/:path*',
   ],
 };

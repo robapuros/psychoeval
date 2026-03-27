@@ -1,90 +1,68 @@
 {
   "id": "GAD7",
-  "name": "Generalized Anxiety Disorder 7-item scale",
+  "name": "Escala de Ansiedad Generalizada-7",
   "shortName": "GAD-7",
-  "category": "Anxiety",
-  "description": "A 7-item anxiety screening tool",
-  "timeEstimate": "2 minutes",
+  "category": "Ansiedad",
+  "description": "Instrumento de cribado para trastorno de ansiedad generalizada. Evalúa la frecuencia de síntomas de ansiedad en las últimas dos semanas.",
+  "language": "es-ES",
+  "version": "1.0",
+  "source": "Spitzer et al. (2006). Dominio público.",
+  "validation": "García-Campayo et al. (2010) - Validación española",
+  "timeEstimate": "1-2 minutos",
+  "instructions": "Durante las últimas 2 semanas, ¿con qué frecuencia le han molestado los siguientes problemas?",
+  "responseOptions": [
+    { "value": 0, "label": "Ningún día" },
+    { "value": 1, "label": "Varios días" },
+    { "value": 2, "label": "Más de la mitad de los días" },
+    { "value": 3, "label": "Casi todos los días" }
+  ],
   "questions": [
     {
       "number": 1,
-      "text": "Feeling nervous, anxious, or on edge",
-      "options": [
-        { "value": 0, "label": "Not at all" },
-        { "value": 1, "label": "Several days" },
-        { "value": 2, "label": "More than half the days" },
-        { "value": 3, "label": "Nearly every day" }
-      ]
+      "text": "Sentirse nervioso/a, ansioso/a o con los nervios de punta",
+      "category": "nerviosismo"
     },
     {
       "number": 2,
-      "text": "Not being able to stop or control worrying",
-      "options": [
-        { "value": 0, "label": "Not at all" },
-        { "value": 1, "label": "Several days" },
-        { "value": 2, "label": "More than half the days" },
-        { "value": 3, "label": "Nearly every day" }
-      ]
+      "text": "No poder parar o controlar la preocupación",
+      "category": "preocupacion"
     },
     {
       "number": 3,
-      "text": "Worrying too much about different things",
-      "options": [
-        { "value": 0, "label": "Not at all" },
-        { "value": 1, "label": "Several days" },
-        { "value": 2, "label": "More than half the days" },
-        { "value": 3, "label": "Nearly every day" }
-      ]
+      "text": "Preocuparse demasiado por diferentes cosas",
+      "category": "preocupacion_excesiva"
     },
     {
       "number": 4,
-      "text": "Trouble relaxing",
-      "options": [
-        { "value": 0, "label": "Not at all" },
-        { "value": 1, "label": "Several days" },
-        { "value": 2, "label": "More than half the days" },
-        { "value": 3, "label": "Nearly every day" }
-      ]
+      "text": "Dificultad para relajarse",
+      "category": "tension"
     },
     {
       "number": 5,
-      "text": "Being so restless that it is hard to sit still",
-      "options": [
-        { "value": 0, "label": "Not at all" },
-        { "value": 1, "label": "Several days" },
-        { "value": 2, "label": "More than half the days" },
-        { "value": 3, "label": "Nearly every day" }
-      ]
+      "text": "Estar tan inquieto/a que es difícil permanecer sentado/a tranquilamente",
+      "category": "inquietud"
     },
     {
       "number": 6,
-      "text": "Becoming easily annoyed or irritable",
-      "options": [
-        { "value": 0, "label": "Not at all" },
-        { "value": 1, "label": "Several days" },
-        { "value": 2, "label": "More than half the days" },
-        { "value": 3, "label": "Nearly every day" }
-      ]
+      "text": "Irritarse o enfadarse con facilidad",
+      "category": "irritabilidad"
     },
     {
       "number": 7,
-      "text": "Feeling afraid, as if something awful might happen",
-      "options": [
-        { "value": 0, "label": "Not at all" },
-        { "value": 1, "label": "Several days" },
-        { "value": 2, "label": "More than half the days" },
-        { "value": 3, "label": "Nearly every day" }
-      ]
+      "text": "Sentir miedo como si algo terrible pudiera suceder",
+      "category": "miedo"
     }
   ],
   "scoring": {
     "method": "sum",
     "range": { "min": 0, "max": 21 },
-    "severityLevels": [
-      { "label": "Minimal", "min": 0, "max": 4, "color": "green" },
-      { "label": "Mild", "min": 5, "max": 9, "color": "yellow" },
-      { "label": "Moderate", "min": 10, "max": 14, "color": "orange" },
-      { "label": "Severe", "min": 15, "max": 21, "color": "red" }
-    ]
+    "interpretation": [
+      { "min": 0, "max": 4, "severity": "Mínima", "label": "Ansiedad mínima", "color": "#3B6D11", "action": "No requiere intervención" },
+      { "min": 5, "max": 9, "severity": "Leve", "label": "Ansiedad leve", "color": "#BA7517", "action": "Seguimiento, técnicas de relajación" },
+      { "min": 10, "max": 14, "severity": "Moderada", "label": "Ansiedad moderada", "color": "#BA7517", "action": "Probable TAG, considerar tratamiento" },
+      { "min": 15, "max": 21, "severity": "Severa", "label": "Ansiedad severa", "color": "#E24B4A", "action": "TAG activo, tratamiento recomendado" }
+    ],
+    "cutoffRecommendation": 10,
+    "cutoffDescription": "Puntuación ≥ 10 sugiere trastorno de ansiedad generalizada clínicamente significativo"
   }
 }

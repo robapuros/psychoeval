@@ -56,11 +56,11 @@ model Patient {
 
 // Instrument Types
 enum InstrumentType {
-  PHQ9  // Depression
-  GAD7  // Anxiety
-  PCL5  // PTSD
-  AUDIT // Alcohol Use
-  MMSE  // Cognitive Assessment
+  PHQ9  // Depresión
+  GAD7  // Ansiedad
+  PCL5  // TEPT (Trauma)
+  AUDIT // Consumo de Alcohol
+  MEC   // Evaluación Cognitiva (Mini Examen Cognoscitivo)
 }
 
 // Assessment Status

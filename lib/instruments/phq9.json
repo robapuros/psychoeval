@@ -1,113 +1,82 @@
 {
   "id": "PHQ9",
-  "name": "Patient Health Questionnaire-9",
+  "name": "Cuestionario de Salud del Paciente-9",
   "shortName": "PHQ-9",
-  "category": "Depression",
-  "description": "A 9-item depression screening tool based on DSM-IV criteria",
-  "timeEstimate": "2-3 minutes",
+  "category": "Depresión",
+  "description": "Instrumento de cribado de depresión basado en criterios DSM-IV. Evalúa la presencia y severidad de síntomas depresivos en las últimas dos semanas.",
+  "language": "es-ES",
+  "version": "1.0",
+  "source": "Spitzer, Kroenke & Williams (1999). Dominio público.",
+  "validation": "Diez-Quevedo et al. (2001) - Validación española",
+  "timeEstimate": "2-3 minutos",
+  "instructions": "Durante las últimas 2 semanas, ¿con qué frecuencia le han molestado los siguientes problemas?",
+  "responseOptions": [
+    { "value": 0, "label": "Ningún día" },
+    { "value": 1, "label": "Varios días" },
+    { "value": 2, "label": "Más de la mitad de los días" },
+    { "value": 3, "label": "Casi todos los días" }
+  ],
   "questions": [
     {
       "number": 1,
-      "text": "Little interest or pleasure in doing things",
-      "options": [
-        { "value": 0, "label": "Not at all" },
-        { "value": 1, "label": "Several days" },
-        { "value": 2, "label": "More than half the days" },
-        { "value": 3, "label": "Nearly every day" }
-      ]
+      "text": "Poco interés o placer en hacer cosas",
+      "category": "anhedonia"
     },
     {
       "number": 2,
-      "text": "Feeling down, depressed, or hopeless",
-      "options": [
-        { "value": 0, "label": "Not at all" },
-        { "value": 1, "label": "Several days" },
-        { "value": 2, "label": "More than half the days" },
-        { "value": 3, "label": "Nearly every day" }
-      ]
+      "text": "Sentirse desanimado/a, deprimido/a o sin esperanza",
+      "category": "estado_animo"
     },
     {
       "number": 3,
-      "text": "Trouble falling or staying asleep, or sleeping too much",
-      "options": [
-        { "value": 0, "label": "Not at all" },
-        { "value": 1, "label": "Several days" },
-        { "value": 2, "label": "More than half the days" },
-        { "value": 3, "label": "Nearly every day" }
-      ]
+      "text": "Problemas para quedarse o permanecer dormido/a, o dormir demasiado",
+      "category": "sueño"
     },
     {
       "number": 4,
-      "text": "Feeling tired or having little energy",
-      "options": [
-        { "value": 0, "label": "Not at all" },
-        { "value": 1, "label": "Several days" },
-        { "value": 2, "label": "More than half the days" },
-        { "value": 3, "label": "Nearly every day" }
-      ]
+      "text": "Sentirse cansado/a o tener poca energía",
+      "category": "energia"
     },
     {
       "number": 5,
-      "text": "Poor appetite or overeating",
-      "options": [
-        { "value": 0, "label": "Not at all" },
-        { "value": 1, "label": "Several days" },
-        { "value": 2, "label": "More than half the days" },
-        { "value": 3, "label": "Nearly every day" }
-      ]
+      "text": "Falta de apetito o comer en exceso",
+      "category": "apetito"
     },
     {
       "number": 6,
-      "text": "Feeling bad about yourself — or that you are a failure or have let yourself or your family down",
-      "options": [
-        { "value": 0, "label": "Not at all" },
-        { "value": 1, "label": "Several days" },
-        { "value": 2, "label": "More than half the days" },
-        { "value": 3, "label": "Nearly every day" }
-      ]
+      "text": "Sentirse mal consigo mismo/a, o sentir que es un fracaso o que ha decepcionado a su familia o a sí mismo/a",
+      "category": "autoestima"
     },
     {
       "number": 7,
-      "text": "Trouble concentrating on things, such as reading the newspaper or watching television",
-      "options": [
-        { "value": 0, "label": "Not at all" },
-        { "value": 1, "label": "Several days" },
-        { "value": 2, "label": "More than half the days" },
-        { "value": 3, "label": "Nearly every day" }
-      ]
+      "text": "Problemas para concentrarse en cosas tales como leer el periódico o ver la televisión",
+      "category": "concentracion"
     },
     {
       "number": 8,
-      "text": "Moving or speaking so slowly that other people could have noticed. Or the opposite — being so fidgety or restless that you have been moving around a lot more than usual",
-      "options": [
-        { "value": 0, "label": "Not at all" },
-        { "value": 1, "label": "Several days" },
-        { "value": 2, "label": "More than half the days" },
-        { "value": 3, "label": "Nearly every day" }
-      ]
+      "text": "Moverse o hablar tan lentamente que otras personas podrían notarlo. O lo contrario: estar tan inquieto/a o agitado/a que se ha estado moviendo mucho más de lo habitual",
+      "category": "psicomotor"
     },
     {
       "number": 9,
-      "text": "Thoughts that you would be better off dead, or of hurting yourself in some way",
-      "options": [
-        { "value": 0, "label": "Not at all" },
-        { "value": 1, "label": "Several days" },
-        { "value": 2, "label": "More than half the days" },
-        { "value": 3, "label": "Nearly every day" }
-      ],
+      "text": "Pensamientos de que estaría mejor muerto/a, o de hacerse daño de alguna manera",
+      "category": "ideacion_suicida",
       "critical": true,
-      "criticalThreshold": 1
+      "criticalThreshold": 1,
+      "criticalAlert": "⚠️ ALERTA: Respuesta positiva en ítem de ideación suicida. Requiere evaluación inmediata."
     }
   ],
   "scoring": {
     "method": "sum",
     "range": { "min": 0, "max": 27 },
-    "severityLevels": [
-      { "label": "None", "min": 0, "max": 4, "color": "green" },
-      { "label": "Mild", "min": 5, "max": 9, "color": "yellow" },
-      { "label": "Moderate", "min": 10, "max": 14, "color": "orange" },
-      { "label": "Moderately Severe", "min": 15, "max": 19, "color": "red" },
-      { "label": "Severe", "min": 20, "max": 27, "color": "red" }
-    ]
+    "interpretation": [
+      { "min": 0, "max": 4, "severity": "Mínima", "label": "Sin depresión o depresión mínima", "color": "#3B6D11", "action": "No requiere intervención" },
+      { "min": 5, "max": 9, "severity": "Leve", "label": "Depresión leve", "color": "#BA7517", "action": "Seguimiento, considerar psicoterapia" },
+      { "min": 10, "max": 14, "severity": "Moderada", "label": "Depresión moderada", "color": "#BA7517", "action": "Psicoterapia y/o farmacoterapia" },
+      { "min": 15, "max": 19, "severity": "Moderadamente severa", "label": "Depresión moderadamente severa", "color": "#E24B4A", "action": "Tratamiento activo con psicoterapia y farmacoterapia" },
+      { "min": 20, "max": 27, "severity": "Severa", "label": "Depresión severa", "color": "#A32D2D", "action": "Tratamiento inmediato, considerar intervención intensiva" }
+    ],
+    "cutoffRecommendation": 10,
+    "cutoffDescription": "Puntuación ≥ 10 sugiere depresión clínicamente significativa"
   }
 }
