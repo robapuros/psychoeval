@@ -1,0 +1,109 @@
+// Prisma Schema for PsicoEval
+// Database: PostgreSQL
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Professional (Psychologist, Therapist, etc.)
+model Professional {
+  id             String   @id @default(uuid())
+  email          String   @unique
+  password_hash  String
+  name           String
+  specialty      String?
+  license_number String?
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+
+  // Relations
+  patients    Patient[]
+  assessments Assessment[]
+
+  @@map("professionals")
+}
+
+// Patient
+model Patient {
+  id              String   @id @default(uuid())
+  professional_id String
+  name            String
+  email           String?
+  phone           String?
+  notes           String?  @db.Text
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  // Relations
+  professional Professional @relation(fields: [professional_id], references: [id], onDelete: Cascade)
+  assessments  Assessment[]
+
+  @@index([professional_id])
+  @@map("patients")
+}
+
+// Instrument Types
+enum InstrumentType {
+  PHQ9  // Depression
+  GAD7  // Anxiety
+  PCL5  // PTSD
+  AUDIT // Alcohol Use
+  MMSE  // Cognitive Assessment
+}
+
+// Assessment Status
+enum AssessmentStatus {
+  PENDING
+  COMPLETED
+  EXPIRED
+}
+
+// Assessment (Questionnaire Instance)
+model Assessment {
+  id                String           @id @default(uuid())
+  token             String           @unique @default(cuid())
+  patient_id        String
+  professional_id   String
+  instrument_type   InstrumentType
+  status            AssessmentStatus @default(PENDING)
+  created_at        DateTime         @default(now())
+  expires_at        DateTime
+  completed_at      DateTime?
+  score             Int?
+  severity          String?
+  has_critical_item Boolean          @default(false)
+
+  // Relations
+  patient      Patient      @relation(fields: [patient_id], references: [id], onDelete: Cascade)
+  professional Professional @relation(fields: [professional_id], references: [id], onDelete: Cascade)
+  responses    Response[]
+
+  @@index([token])
+  @@index([patient_id])
+  @@index([professional_id])
+  @@index([status])
+  @@index([expires_at])
+  @@map("assessments")
+}
+
+// Individual Question Response
+model Response {
+  id              String   @id @default(uuid())
+  assessment_id   String
+  question_number Int
+  question_text   String   @db.Text
+  response_value  Int
+  response_text   String?  @db.Text
+  created_at      DateTime @default(now())
+
+  // Relations
+  assessment Assessment @relation(fields: [assessment_id], references: [id], onDelete: Cascade)
+
+  @@index([assessment_id])
+  @@map("responses")
+}
