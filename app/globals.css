@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #2563EB;
+  --success: #10B981;
+  --warning: #F59E0B;
+  --danger: #EF4444;
+  --bg: #FFFFFF;
+  --text: #1F2937;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111827;
+    --text: #F9FAFB;
+  }
+}
+
+body {
+  color: var(--text);
+  background: var(--bg);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Severity color coding */
+.severity-green {
+  @apply bg-green-100 text-green-800 border-green-300;
+}
+
+.severity-yellow {
+  @apply bg-yellow-100 text-yellow-800 border-yellow-300;
+}
+
+.severity-orange {
+  @apply bg-orange-100 text-orange-800 border-orange-300;
+}
+
+.severity-red {
+  @apply bg-red-100 text-red-800 border-red-300;
+}
+
+/* Critical item alert */
+.critical-alert {
+  @apply bg-red-50 border-l-4 border-red-500 p-4 text-red-900;
+}
+
+/* Patient questionnaire */
+.question-card {
+  @apply bg-white rounded-lg shadow-md p-6 border border-gray-200;
+}
+
+.option-button {
+  @apply w-full p-4 text-left rounded-lg border-2 border-gray-200 hover:border-blue-500 hover:bg-blue-50 transition-all cursor-pointer;
+}
+
+.option-button-selected {
+  @apply border-blue-500 bg-blue-50;
+}
+
+/* Progress bar */
+.progress-bar {
+  @apply h-2 bg-blue-500 rounded-full transition-all duration-300;
+}
