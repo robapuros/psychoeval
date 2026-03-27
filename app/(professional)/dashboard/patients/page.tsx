@@ -12,6 +12,7 @@ interface Patient {
   createdAt: string;
   assessments: Array<{
     id: string;
+    token: string;
     instrumentType: string;
     status: string;
     score: number | null;
@@ -180,12 +181,29 @@ export default function PatientsPage() {
                   </span>
                   
                   <div className="flex gap-2">
-                    <button
-                      onClick={() => handleSendAssessment(patient)}
-                      className="px-3 py-1 text-[10px] font-medium bg-[#185FA5] text-white rounded-md hover:bg-[#0C447C] transition-colors"
-                    >
-                      Enviar test
-                    </button>
+                    {lastAssessment?.status === 'completed' ? (
+                      <>
+                        <button
+                          onClick={() => router.push(`/dashboard/patients/${patient.id}/assessments/${lastAssessment.token}`)}
+                          className="px-3 py-1 text-[10px] font-medium bg-[#185FA5] text-white rounded-md hover:bg-[#0C447C] transition-colors"
+                        >
+                          Ver
+                        </button>
+                        <button
+                          onClick={() => handleSendAssessment(patient)}
+                          className="px-3 py-1 text-[10px] font-medium border border-[rgba(0,0,0,0.13)] rounded-md hover:bg-[#F1EFE8] transition-colors"
+                        >
+                          Nuevo
+                        </button>
+                      </>
+                    ) : (
+                      <button
+                        onClick={() => handleSendAssessment(patient)}
+                        className="px-3 py-1 text-[10px] font-medium bg-[#185FA5] text-white rounded-md hover:bg-[#0C447C] transition-colors"
+                      >
+                        Enviar test
+                      </button>
+                    )}
                   </div>
                 </div>
               );
