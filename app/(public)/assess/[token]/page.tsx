@@ -254,6 +254,22 @@ export default function AssessmentPage() {
             )}
           </div>
         </div>
+
+        {/* Footer */}
+        <div className="mt-6 text-center pb-4">
+          <p className="text-[10px] text-[#888780]">
+            <a
+              href="/licencias"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[#185FA5] transition-colors"
+            >
+              Instrumentos y Licencias
+            </a>
+            {' • '}
+            PsicoEvalúa © 2026
+          </p>
+        </div>
       </div>
     </div>
   );
