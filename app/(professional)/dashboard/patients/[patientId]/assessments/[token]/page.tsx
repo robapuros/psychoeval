@@ -50,6 +50,7 @@ export default function AssessmentDetailsPage() {
   const [instrument, setInstrument] = useState<Instrument | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showResponses, setShowResponses] = useState(true);
 
   useEffect(() => {
     loadAssessment();
@@ -255,50 +256,68 @@ export default function AssessmentDetailsPage() {
 
         {/* Responses Card */}
         <div className="bg-white rounded-xl border border-[rgba(0,0,0,0.08)] shadow-sm overflow-hidden">
-          <div className="px-4 py-3 bg-[#F1EFE8] border-b border-[rgba(0,0,0,0.08)]">
+          <button
+            onClick={() => setShowResponses(!showResponses)}
+            className="w-full px-4 py-3 bg-[#F1EFE8] border-b border-[rgba(0,0,0,0.08)] flex items-center justify-between hover:bg-[#E8E6DF] transition-colors"
+          >
             <h2 className="text-[12px] font-bold tracking-tight">
-              Respuestas Detalladas
+              Respuestas Detalladas ({assessment.responses.length})
             </h2>
-          </div>
+            <svg
+              className={`w-4 h-4 transition-transform ${showResponses ? 'rotate-180' : ''}`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </button>
 
-          <div className="divide-y divide-[rgba(0,0,0,0.08)]">
-            {assessment.responses.map((response) => (
-              <div
-                key={response.questionNumber}
-                className={`px-4 py-3 ${
-                  response.critical && response.value > 0 ? 'bg-[#FFF9F9]' : ''
-                }`}
-              >
-                <div className="flex items-start gap-3">
-                  <span className="flex-shrink-0 w-8 h-8 rounded-full bg-[#185FA5] text-white text-[11px] font-bold flex items-center justify-center">
-                    {response.questionNumber}
-                  </span>
-                  <div className="flex-1">
-                    <p className="text-[11px] font-semibold text-[#1A1917] mb-2">
-                      {response.questionText}
-                      {response.critical && (
-                        <span className="ml-2 text-[#E24B4A]">⚠️</span>
-                      )}
-                    </p>
-                    <div className="flex items-center gap-2">
-                      <span className="text-[10px] text-[#888780] uppercase tracking-wide">
-                        Respuesta:
-                      </span>
-                      <span
-                        className={`inline-flex items-center px-2 py-1 rounded text-[10px] font-semibold ${
-                          response.critical && response.value > 0
-                            ? 'bg-[#FCEBEB] text-[#A32D2D]'
-                            : 'bg-[#F1EFE8] text-[#5F5E5A]'
-                        }`}
-                      >
-                        {response.valueLabel} ({response.value})
-                      </span>
+          {showResponses && (
+            <div className="divide-y divide-[rgba(0,0,0,0.08)]">
+              {assessment.responses.map((response) => (
+                <div
+                  key={response.questionNumber}
+                  className={`px-4 py-3 ${
+                    response.critical && response.value > 0 ? 'bg-[#FFF9F9]' : ''
+                  }`}
+                >
+                  <div className="flex items-start gap-3">
+                    <span className="flex-shrink-0 w-8 h-8 rounded-full bg-[#185FA5] text-white text-[11px] font-bold flex items-center justify-center">
+                      {response.questionNumber}
+                    </span>
+                    <div className="flex-1">
+                      <p className="text-[11px] font-semibold text-[#1A1917] mb-2">
+                        {response.questionText}
+                        {response.critical && (
+                          <span className="ml-2 text-[#E24B4A]">⚠️</span>
+                        )}
+                      </p>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] text-[#888780] uppercase tracking-wide">
+                          Respuesta:
+                        </span>
+                        <span
+                          className={`inline-flex items-center px-2 py-1 rounded text-[10px] font-semibold ${
+                            response.critical && response.value > 0
+                              ? 'bg-[#FCEBEB] text-[#A32D2D]'
+                              : 'bg-[#F1EFE8] text-[#5F5E5A]'
+                          }`}
+                        >
+                          {response.valueLabel} ({response.value})
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Actions */}
