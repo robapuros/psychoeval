@@ -118,13 +118,14 @@ export async function POST(
     }
 
     // Guardar respuestas individuales en la base de datos
-    const instrumentData = {
+    const instrumentMap: Record<string, any> = {
       PHQ9: phq9Data,
       GAD7: gad7Data,
       PCL5: pcl5Data,
       AUDIT: auditData,
       MEC: mecData,
-    }[assessment.instrumentType];
+    };
+    const instrumentData = instrumentMap[assessment.instrumentType];
 
     const responseRecords = responses.map((r: any) => {
       const question = instrumentData.questions.find((q: any) => q.number === r.questionNumber);
