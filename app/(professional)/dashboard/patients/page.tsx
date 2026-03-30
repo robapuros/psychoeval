@@ -135,7 +135,14 @@ export default function PatientsPage() {
                   className="grid grid-cols-[2fr_1fr_1fr_1fr_120px] gap-4 px-3.5 py-2 border-b border-[rgba(0,0,0,0.08)] last:border-b-0 items-center hover:bg-[#F1EFE8] transition-colors"
                 >
                   <div>
-                    <div className="text-[11px] font-semibold">{patient.fullName}</div>
+                    <button
+                      onClick={() => router.push(`/dashboard/patients/${patient.id}`)}
+                      className="text-left hover:underline"
+                    >
+                      <div className="text-[11px] font-semibold text-[#185FA5]">
+                        {patient.fullName}
+                      </div>
+                    </button>
                     {patient.email && (
                       <div className="text-[9px] text-[#888780] mt-0.5">{patient.email}</div>
                     )}
@@ -181,29 +188,19 @@ export default function PatientsPage() {
                   </span>
                   
                   <div className="flex gap-2">
-                    {lastAssessment?.status === 'COMPLETED' ? (
-                      <>
-                        <button
-                          onClick={() => router.push(`/dashboard/patients/${patient.id}/assessments/${lastAssessment.token}`)}
-                          className="px-3 py-1 text-[10px] font-medium bg-[#185FA5] text-white rounded-md hover:bg-[#0C447C] transition-colors"
-                        >
-                          Ver
-                        </button>
-                        <button
-                          onClick={() => handleSendAssessment(patient)}
-                          className="px-3 py-1 text-[10px] font-medium border border-[rgba(0,0,0,0.13)] rounded-md hover:bg-[#F1EFE8] transition-colors"
-                        >
-                          Nuevo
-                        </button>
-                      </>
-                    ) : (
-                      <button
-                        onClick={() => handleSendAssessment(patient)}
-                        className="px-3 py-1 text-[10px] font-medium bg-[#185FA5] text-white rounded-md hover:bg-[#0C447C] transition-colors"
-                      >
-                        Enviar test
-                      </button>
-                    )}
+                    <button
+                      onClick={() => router.push(`/dashboard/patients/${patient.id}`)}
+                      className="px-3 py-1 text-[10px] font-medium bg-[#185FA5] text-white rounded-md hover:bg-[#0C447C] transition-colors"
+                      title="Ver historial completo"
+                    >
+                      {patient.assessments.length > 1 ? `Historial (${patient.assessments.length})` : 'Ver perfil'}
+                    </button>
+                    <button
+                      onClick={() => handleSendAssessment(patient)}
+                      className="px-3 py-1 text-[10px] font-medium border border-[rgba(0,0,0,0.13)] rounded-md hover:bg-[#F1EFE8] transition-colors"
+                    >
+                      Enviar test
+                    </button>
                   </div>
                 </div>
               );
