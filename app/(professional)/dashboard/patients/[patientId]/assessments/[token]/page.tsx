@@ -177,35 +177,35 @@ export default function AssessmentDetailsPage() {
         userEmail={session?.user?.email}
       />
 
-      <div className="max-w-4xl mx-auto p-6 space-y-6">
+      <div className="max-w-4xl mx-auto p-3 sm:p-6 space-y-3 sm:space-y-6">
         {/* Botón de volver */}
         <button
           onClick={() => router.push(`/dashboard/patients/${assessment.patient.id}`)}
-          className="inline-flex items-center gap-2 px-3 py-1.5 text-[11px] font-medium text-[#185FA5] hover:text-[#0C447C] transition-colors"
+          className="inline-flex items-center gap-2 px-3 py-1.5 text-[10px] sm:text-[11px] font-medium text-[#185FA5] hover:text-[#0C447C] transition-colors"
         >
           ← Volver
         </button>
 
         {/* Puntuación Total Card */}
-        <div className="bg-white rounded-lg border border-[rgba(0,0,0,0.1)] p-8">
-          <div className="flex items-baseline gap-3 mb-2">
-            <h1 className="text-[48px] font-bold tracking-tight leading-none">
-              {assessment.score}/<span className="text-[32px] text-[#888780]">{instrument.scoring.range.max}</span>
+        <div className="bg-white rounded-lg border border-[rgba(0,0,0,0.1)] p-4 sm:p-8">
+          <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-3 mb-2">
+            <h1 className="text-[36px] sm:text-[48px] font-bold tracking-tight leading-none">
+              {assessment.score}/<span className="text-[24px] sm:text-[32px] text-[#888780]">{instrument.scoring.range.max}</span>
             </h1>
             <div className="flex flex-col">
               <span 
-                className="text-[20px] font-bold mb-1"
+                className="text-[16px] sm:text-[20px] font-bold mb-0.5 sm:mb-1"
                 style={{ color: severityInfo?.color || '#1A1917' }}
               >
                 {severityInfo?.severity || assessment.severity}
               </span>
-              <span className="text-[12px] text-[#888780]">
+              <span className="text-[11px] sm:text-[12px] text-[#888780]">
                 Percentil {percentile}
               </span>
             </div>
           </div>
           
-          <p className="text-[11px] text-[#888780] mb-4">
+          <p className="text-[10px] sm:text-[11px] text-[#888780] mb-3 sm:mb-4">
             Completado el {assessment.completedAt
               ? new Date(assessment.completedAt).toLocaleDateString('es-ES', {
                   day: 'numeric',
@@ -219,8 +219,8 @@ export default function AssessmentDetailsPage() {
 
           {/* Alerta Crítica */}
           {assessment.hasCriticalAlert && criticalResponse && (
-            <div className="mt-4 p-5 bg-[#FCEBEB] border-l-4 border-[#E24B4A] rounded-lg">
-              <div className="flex items-start gap-3">
+            <div className="mt-3 sm:mt-4 p-3 sm:p-5 bg-[#FCEBEB] border-l-4 border-[#E24B4A] rounded-lg">
+              <div className="flex flex-col sm:flex-row items-start gap-3">
                 <div className="w-10 h-10 bg-[#E24B4A] rounded-full flex items-center justify-center flex-shrink-0">
                   <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -486,16 +486,16 @@ export default function AssessmentDetailsPage() {
         </div>
 
         {/* Acciones */}
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
           <button
             onClick={() => router.push(`/dashboard/patients/${assessment.patient.id}`)}
-            className="flex-1 px-4 py-3 text-[12px] font-semibold border border-[rgba(0,0,0,0.13)] rounded-lg hover:bg-[#F1EFE8] transition-colors"
+            className="flex-1 px-4 py-2.5 sm:py-3 text-[11px] sm:text-[12px] font-semibold border border-[rgba(0,0,0,0.13)] rounded-lg hover:bg-[#F1EFE8] transition-colors"
           >
             ← Volver al paciente
           </button>
           <button
             onClick={() => alert('Exportar a PDF (próximamente)')}
-            className="flex-1 px-4 py-3 text-[12px] font-semibold bg-[#185FA5] text-white rounded-lg hover:bg-[#0C447C] transition-colors"
+            className="flex-1 px-4 py-2.5 sm:py-3 text-[11px] sm:text-[12px] font-semibold bg-[#185FA5] text-white rounded-lg hover:bg-[#0C447C] transition-colors"
           >
             📄 Exportar PDF
           </button>

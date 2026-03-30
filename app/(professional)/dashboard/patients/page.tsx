@@ -80,20 +80,20 @@ export default function PatientsPage() {
       <DashboardHeader title="Pacientes" userEmail={session?.user?.email} />
 
       {/* Actions Bar */}
-      <div className="bg-white border-b border-[rgba(0,0,0,0.08)] px-4 py-2.5 flex items-center justify-end gap-2">
-        <span className="px-3 py-1.5 text-[10px] border border-[rgba(0,0,0,0.13)] rounded-md bg-transparent font-mono">
+      <div className="bg-white border-b border-[rgba(0,0,0,0.08)] px-3 sm:px-4 py-2.5 flex items-center justify-between sm:justify-end gap-2">
+        <span className="hidden sm:inline px-3 py-1.5 text-[10px] border border-[rgba(0,0,0,0.13)] rounded-md bg-transparent font-mono">
           {new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })}
         </span>
         <button
           onClick={() => setShowCreateModal(true)}
-          className="px-3 py-1.5 text-[10px] font-medium bg-[#185FA5] text-white rounded-md hover:bg-[#0C447C] transition-colors"
+          className="px-3 py-1.5 text-[10px] sm:text-[10px] font-medium bg-[#185FA5] text-white rounded-md hover:bg-[#0C447C] transition-colors"
         >
           + Nuevo paciente
         </button>
       </div>
 
       {/* Content */}
-      <div className="p-4">
+      <div className="p-3 sm:p-4">
         <div className="mb-3">
           <div className="text-[16px] font-bold tracking-tight mb-0.5">
             Mis Pacientes ({patients.length})
@@ -101,10 +101,10 @@ export default function PatientsPage() {
           <div className="text-[10px] text-[#888780]">Gestión de casos clínicos</div>
         </div>
 
-        {/* Table */}
+        {/* Table / Cards */}
         {patients.length === 0 ? (
-          <div className="bg-white border border-[rgba(0,0,0,0.08)] rounded-xl p-8 text-center">
-            <p className="text-[12px] text-[#888780] mb-4">
+          <div className="bg-white border border-[rgba(0,0,0,0.08)] rounded-xl p-6 sm:p-8 text-center">
+            <p className="text-[11px] sm:text-[12px] text-[#888780] mb-4">
               No tienes pacientes registrados aún
             </p>
             <button
@@ -115,18 +115,20 @@ export default function PatientsPage() {
             </button>
           </div>
         ) : (
-          <div className="bg-white border border-[rgba(0,0,0,0.08)] rounded-xl overflow-hidden">
-            {/* Header */}
-            <div className="grid grid-cols-[2fr_1fr_1fr_1fr_120px] gap-4 px-3.5 py-1.5 bg-[#F1EFE8] border-b border-[rgba(0,0,0,0.08)]">
-              <span className="text-[9px] font-bold uppercase tracking-wide text-[#888780]">Paciente</span>
-              <span className="text-[9px] font-bold uppercase tracking-wide text-[#888780]">Último test</span>
-              <span className="text-[9px] font-bold uppercase tracking-wide text-[#888780]">Fecha</span>
-              <span className="text-[9px] font-bold uppercase tracking-wide text-[#888780]">Estado</span>
-              <span></span>
-            </div>
+          <>
+            {/* Desktop: Table */}
+            <div className="hidden md:block bg-white border border-[rgba(0,0,0,0.08)] rounded-xl overflow-hidden">
+              {/* Header */}
+              <div className="grid grid-cols-[2fr_1fr_1fr_1fr_120px] gap-4 px-3.5 py-1.5 bg-[#F1EFE8] border-b border-[rgba(0,0,0,0.08)]">
+                <span className="text-[9px] font-bold uppercase tracking-wide text-[#888780]">Paciente</span>
+                <span className="text-[9px] font-bold uppercase tracking-wide text-[#888780]">Último test</span>
+                <span className="text-[9px] font-bold uppercase tracking-wide text-[#888780]">Fecha</span>
+                <span className="text-[9px] font-bold uppercase tracking-wide text-[#888780]">Estado</span>
+                <span></span>
+              </div>
 
-            {/* Rows */}
-            {patients.map((patient) => {
+              {/* Rows */}
+              {patients.map((patient) => {
               const lastAssessment = patient.assessments[0];
               const hasAlert = lastAssessment?.hasCriticalAlert;
               
@@ -206,7 +208,111 @@ export default function PatientsPage() {
                 </div>
               );
             })}
-          </div>
+            </div>
+
+            {/* Mobile: Cards */}
+            <div className="md:hidden space-y-3">
+              {patients.map((patient) => {
+                const lastAssessment = patient.assessments[0];
+                const hasAlert = lastAssessment?.hasCriticalAlert;
+                
+                return (
+                  <div
+                    key={patient.id}
+                    className="bg-white border border-[rgba(0,0,0,0.08)] rounded-lg overflow-hidden"
+                  >
+                    <div className="p-3">
+                      {/* Header: Nombre + Estado */}
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex-1 min-w-0">
+                          <button
+                            onClick={() => router.push(`/dashboard/patients/${patient.id}`)}
+                            className="text-left hover:underline"
+                          >
+                            <h3 className="text-[12px] font-semibold text-[#185FA5] truncate">
+                              {patient.fullName}
+                            </h3>
+                          </button>
+                          {patient.email && (
+                            <p className="text-[9px] text-[#888780] truncate mt-0.5">{patient.email}</p>
+                          )}
+                        </div>
+                        
+                        <div className="ml-2 flex-shrink-0">
+                          {lastAssessment?.status === 'COMPLETED' ? (
+                            <span
+                              className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[8px] font-semibold whitespace-nowrap ${
+                                hasAlert
+                                  ? 'bg-[#FCEBEB] text-[#A32D2D]'
+                                  : lastAssessment.severity === 'Severa' || lastAssessment.severity === 'Moderadamente severa'
+                                  ? 'bg-[#FCEBEB] text-[#A32D2D]'
+                                  : lastAssessment.severity === 'Moderada'
+                                  ? 'bg-[#FAEEDA] text-[#854F0B]'
+                                  : 'bg-[#E1F5EE] text-[#0F6E56]'
+                              }`}
+                            >
+                              {hasAlert ? '⚠ Urgente' : lastAssessment.severity || 'OK'}
+                            </span>
+                          ) : lastAssessment?.status === 'PENDING' ? (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[8px] font-semibold bg-[#F1EFE8] text-[#888780]">
+                              Pendiente
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[8px] font-semibold bg-[#E1F5EE] text-[#0F6E56]">
+                              Sin eval.
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Info Grid */}
+                      {lastAssessment && (
+                        <div className="grid grid-cols-2 gap-2 mb-3 pb-3 border-b border-[rgba(0,0,0,0.08)]">
+                          <div>
+                            <div className="text-[8px] uppercase tracking-wide font-semibold text-[#888780] mb-0.5">
+                              Test
+                            </div>
+                            <div className="text-[10px] font-bold font-mono text-[#1A1917]">
+                              {lastAssessment.instrumentType}
+                            </div>
+                          </div>
+                          <div>
+                            <div className="text-[8px] uppercase tracking-wide font-semibold text-[#888780] mb-0.5">
+                              Fecha
+                            </div>
+                            <div className="text-[10px] text-[#1A1917]">
+                              {lastAssessment.completedAt
+                                ? new Date(lastAssessment.completedAt).toLocaleDateString('es-ES', {
+                                    day: 'numeric',
+                                    month: 'short',
+                                  })
+                                : 'Pendiente'}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Actions */}
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => router.push(`/dashboard/patients/${patient.id}`)}
+                          className="flex-1 px-3 py-2 text-[10px] font-medium bg-[#185FA5] text-white rounded-md hover:bg-[#0C447C] transition-colors"
+                        >
+                          {patient.assessments.length > 1 ? `Ver (${patient.assessments.length})` : 'Ver perfil'}
+                        </button>
+                        <button
+                          onClick={() => handleSendAssessment(patient)}
+                          className="flex-1 px-3 py-2 text-[10px] font-medium border border-[rgba(0,0,0,0.13)] rounded-md hover:bg-[#F1EFE8] transition-colors"
+                        >
+                          Enviar test
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </>
         )}
       </div>
 

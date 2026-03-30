@@ -18,18 +18,18 @@ export default function DashboardHeader({ title, userEmail }: DashboardHeaderPro
   };
 
   return (
-    <div className="bg-white border-b border-[rgba(0,0,0,0.08)] px-4 h-[50px] flex items-center justify-between">
-      <div className="flex items-center gap-3">
+    <div className="bg-white border-b border-[rgba(0,0,0,0.08)] px-3 sm:px-4 h-[50px] flex items-center justify-between">
+      <div className="flex items-center gap-2 sm:gap-3 min-w-0">
         <Image
           src="/logo.png"
           alt="PsicoEvalúa"
           width={120}
           height={30}
-          className="h-[28px] w-auto"
+          className="h-[24px] sm:h-[28px] w-auto flex-shrink-0"
           priority
         />
-        <span className="text-[11px] text-[#888780]">|</span>
-        <span className="text-[11px] font-medium text-[#888780]">{title}</span>
+        <span className="hidden sm:inline text-[11px] text-[#888780]">|</span>
+        <span className="text-[10px] sm:text-[11px] font-medium text-[#888780] truncate">{title}</span>
       </div>
 
       {/* Menu Hamburguesa */}

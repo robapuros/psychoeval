@@ -154,20 +154,20 @@ export default function PatientProfilePage() {
       {/* Header con menú hamburguesa */}
       <DashboardHeader title={patient.fullName} userEmail={session?.user?.email} />
 
-      <div className="max-w-4xl mx-auto p-4 space-y-4">
+      <div className="max-w-4xl mx-auto p-3 sm:p-4 space-y-3 sm:space-y-4">
         {/* Botón de volver */}
         <div>
           <button
             onClick={() => router.push('/dashboard/patients')}
-            className="inline-flex items-center gap-2 px-3 py-1.5 text-[11px] font-medium border border-[rgba(0,0,0,0.13)] rounded-md hover:bg-[#F1EFE8] transition-colors"
+            className="inline-flex items-center gap-2 px-3 py-1.5 text-[10px] sm:text-[11px] font-medium border border-[rgba(0,0,0,0.13)] rounded-md hover:bg-[#F1EFE8] transition-colors"
           >
             ← Volver a pacientes
           </button>
         </div>
 
         {/* Patient Info Card */}
-        <div className="bg-white rounded-xl border border-[rgba(0,0,0,0.08)] shadow-sm p-4">
-          <div className="grid grid-cols-2 gap-4">
+        <div className="bg-white rounded-xl border border-[rgba(0,0,0,0.08)] shadow-sm p-3 sm:p-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div>
               <p className="text-[9px] uppercase tracking-wide font-semibold text-[#888780] mb-1">
                 Email
@@ -184,11 +184,11 @@ export default function PatientProfilePage() {
                 {patient.phone || '—'}
               </p>
             </div>
-            <div className="col-span-2">
+            <div className="sm:col-span-2">
               <p className="text-[9px] uppercase tracking-wide font-semibold text-[#888780] mb-1">
                 Notas
               </p>
-              <p className="text-[11px] text-[#1A1917]">
+              <p className="text-[10px] sm:text-[11px] text-[#1A1917]">
                 {patient.notes || '—'}
               </p>
             </div>
@@ -221,18 +221,18 @@ export default function PatientProfilePage() {
             </div>
             <div className="divide-y divide-[rgba(0,0,0,0.08)]">
               {pendingAssessments.map((assessment) => (
-                <div key={assessment.id} className="px-4 py-3 flex items-center justify-between">
-                  <div className="flex-1">
+                <div key={assessment.id} className="px-3 sm:px-4 py-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
+                  <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-[11px] font-semibold text-[#1A1917]">
+                      <span className="text-[10px] sm:text-[11px] font-semibold text-[#1A1917]">
                         {assessment.instrumentType}
                       </span>
                       {getStatusBadge(assessment)}
                     </div>
-                    <p className="text-[10px] text-[#888780]">
+                    <p className="text-[9px] sm:text-[10px] text-[#888780]">
                       Enviado: {formatDate(assessment.createdAt)}
                     </p>
-                    <p className="text-[10px] text-[#888780]">
+                    <p className="text-[9px] sm:text-[10px] text-[#888780]">
                       Expira: {formatDate(assessment.expiresAt)}
                     </p>
                   </div>
@@ -242,7 +242,7 @@ export default function PatientProfilePage() {
                       navigator.clipboard.writeText(url);
                       alert('Enlace copiado al portapapeles');
                     }}
-                    className="px-3 py-1.5 text-[10px] font-semibold border border-[rgba(0,0,0,0.13)] rounded-md hover:bg-[#F1EFE8] transition-colors"
+                    className="w-full sm:w-auto px-3 py-1.5 text-[10px] font-semibold border border-[rgba(0,0,0,0.13)] rounded-md hover:bg-[#F1EFE8] transition-colors"
                   >
                     📋 Copiar enlace
                   </button>
@@ -271,27 +271,27 @@ export default function PatientProfilePage() {
               {completedAssessments.map((assessment) => (
                 <div
                   key={assessment.id}
-                  className="px-4 py-3 flex items-center justify-between hover:bg-[#F7F6F3] transition-colors"
+                  className="px-3 sm:px-4 py-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0 hover:bg-[#F7F6F3] transition-colors"
                 >
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-[11px] font-semibold text-[#1A1917]">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-2 mb-1">
+                      <span className="text-[10px] sm:text-[11px] font-semibold text-[#1A1917]">
                         {assessment.instrumentType}
                       </span>
                       {getStatusBadge(assessment)}
                       {assessment.score !== null && (
-                        <span className="text-[10px] text-[#888780]">
+                        <span className="text-[9px] sm:text-[10px] text-[#888780]">
                           Puntuación: {assessment.score}
                         </span>
                       )}
                     </div>
-                    <p className="text-[10px] text-[#888780]">
+                    <p className="text-[9px] sm:text-[10px] text-[#888780]">
                       Completado: {assessment.completedAt ? formatDate(assessment.completedAt) : '—'}
                     </p>
                   </div>
                   <button
                     onClick={() => router.push(`/dashboard/patients/${patient.id}/assessments/${assessment.token}`)}
-                    className="px-3 py-1.5 text-[10px] font-semibold bg-[#185FA5] text-white rounded-md hover:bg-[#0C447C] transition-colors"
+                    className="w-full sm:w-auto px-3 py-1.5 text-[10px] font-semibold bg-[#185FA5] text-white rounded-md hover:bg-[#0C447C] transition-colors"
                   >
                     Ver resultados →
                   </button>

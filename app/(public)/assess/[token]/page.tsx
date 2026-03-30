@@ -168,26 +168,26 @@ export default function AssessmentPage() {
   // Pantalla de instrucciones preliminares
   if (showInstructions) {
     return (
-      <div className="min-h-screen bg-[#F7F6F3] flex flex-col items-center justify-center p-4">
+      <div className="min-h-screen bg-[#F7F6F3] flex flex-col items-center justify-center p-3 sm:p-4">
         <div className="w-full max-w-2xl">
-          <div className="bg-white rounded-xl border border-[rgba(0,0,0,0.08)] shadow-lg p-8">
+          <div className="bg-white rounded-xl border border-[rgba(0,0,0,0.08)] shadow-lg p-4 sm:p-8">
             {/* Logo/Header */}
-            <div className="text-center mb-6">
-              <div className="w-16 h-16 bg-[#185FA5] rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="text-center mb-4 sm:mb-6">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-[#185FA5] rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <svg className="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                 </svg>
               </div>
-              <h1 className="text-[24px] font-bold text-[#1A1917] mb-2">
+              <h1 className="text-[18px] sm:text-[24px] font-bold text-[#1A1917] mb-1 sm:mb-2">
                 {instrument.name}
               </h1>
-              <p className="text-[12px] text-[#888780]">
+              <p className="text-[11px] sm:text-[12px] text-[#888780]">
                 Evaluación enviada por {assessment.professional.name}
               </p>
             </div>
 
             {/* Instrucciones */}
-            <div className="space-y-4 mb-6">
+            <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
               <div className="bg-[#EFF5FB] border border-[#185FA5] rounded-lg p-4">
                 <h2 className="text-[14px] font-bold text-[#185FA5] mb-2 flex items-center gap-2">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -268,24 +268,24 @@ export default function AssessmentPage() {
   return (
     <div className="min-h-screen bg-[#F7F6F3] flex flex-col">
       {/* Header */}
-      <div className="bg-white border-b border-[rgba(0,0,0,0.08)] p-4">
+      <div className="bg-white border-b border-[rgba(0,0,0,0.08)] p-3 sm:p-4">
         <div className="max-w-2xl mx-auto">
           <div className="flex items-center justify-between mb-2">
-            <div>
-              <h1 className="text-[14px] font-bold text-[#1A1917]">{instrument.shortName}</h1>
-              <p className="text-[10px] text-[#888780]">{assessment.professional.name}</p>
+            <div className="min-w-0 flex-1">
+              <h1 className="text-[12px] sm:text-[14px] font-bold text-[#1A1917] truncate">{instrument.shortName}</h1>
+              <p className="text-[9px] sm:text-[10px] text-[#888780] truncate">{assessment.professional.name}</p>
             </div>
-            <div className="text-right">
-              <p className="text-[10px] uppercase tracking-wide font-semibold text-[#888780]">PROGRESO</p>
-              <p className="text-[14px] font-bold text-[#185FA5]">
+            <div className="text-right flex-shrink-0 ml-3">
+              <p className="text-[8px] sm:text-[10px] uppercase tracking-wide font-semibold text-[#888780]">PROGRESO</p>
+              <p className="text-[12px] sm:text-[14px] font-bold text-[#185FA5]">
                 {currentQuestion + 1} / {instrument.questions.length}
               </p>
             </div>
           </div>
           {/* Barra de progreso */}
-          <div className="w-full bg-[#F1EFE8] rounded-full h-2">
+          <div className="w-full bg-[#F1EFE8] rounded-full h-1.5 sm:h-2">
             <div
-              className="bg-[#185FA5] h-2 rounded-full transition-all duration-300"
+              className="bg-[#185FA5] h-1.5 sm:h-2 rounded-full transition-all duration-300"
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -293,28 +293,28 @@ export default function AssessmentPage() {
       </div>
 
       {/* Pregunta */}
-      <div className="flex-1 flex items-center justify-center p-4">
+      <div className="flex-1 flex items-center justify-center p-3 sm:p-4">
         <div className="w-full max-w-2xl">
-          <div className="bg-white rounded-xl border border-[rgba(0,0,0,0.08)] shadow-sm p-8">
-            <p className="text-[10px] uppercase tracking-wide font-semibold text-[#888780] mb-4">
+          <div className="bg-white rounded-xl border border-[rgba(0,0,0,0.08)] shadow-sm p-4 sm:p-8">
+            <p className="text-[9px] sm:text-[10px] uppercase tracking-wide font-semibold text-[#888780] mb-3 sm:mb-4">
               PREGUNTA {currentQuestion + 1}
             </p>
-            <h2 className="text-[18px] font-bold text-[#1A1917] leading-snug mb-6">
+            <h2 className="text-[15px] sm:text-[18px] font-bold text-[#1A1917] leading-snug mb-4 sm:mb-6">
               {question.text}
             </h2>
 
             {question.note && (
-              <p className="text-[11px] text-[#888780] bg-[#F1EFE8] rounded-lg p-3 mb-6">
+              <p className="text-[10px] sm:text-[11px] text-[#888780] bg-[#F1EFE8] rounded-lg p-2.5 sm:p-3 mb-4 sm:mb-6">
                 💡 {question.note}
               </p>
             )}
 
-            <div className="space-y-3">
+            <div className="space-y-2 sm:space-y-3">
               {responseOptions.map((option) => (
                 <button
                   key={option.value}
                   onClick={() => handleResponse(option.value)}
-                  className={`w-full text-left px-4 py-3 rounded-lg border-2 transition-all text-[12px] font-medium ${
+                  className={`w-full text-left px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border-2 transition-all text-[11px] sm:text-[12px] font-medium ${
                     responses[currentQuestion + 1] === option.value
                       ? 'border-[#185FA5] bg-[#EFF5FB] text-[#185FA5]'
                       : 'border-[rgba(0,0,0,0.08)] bg-white text-[#1A1917] hover:border-[#185FA5] hover:bg-[#F7F6F3]'
@@ -327,11 +327,11 @@ export default function AssessmentPage() {
           </div>
 
           {/* Navegación */}
-          <div className="flex items-center justify-between mt-4">
+          <div className="flex items-center justify-between mt-3 sm:mt-4">
             <button
               onClick={handlePrevious}
               disabled={currentQuestion === 0}
-              className="px-4 py-2 text-[11px] font-semibold text-[#888780] hover:text-[#1A1917] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+              className="px-3 sm:px-4 py-2 text-[10px] sm:text-[11px] font-semibold text-[#888780] hover:text-[#1A1917] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
             >
               ← Anterior
             </button>
@@ -340,7 +340,7 @@ export default function AssessmentPage() {
               <button
                 onClick={handleSubmit}
                 disabled={submitting}
-                className="px-6 py-2.5 bg-[#185FA5] text-white text-[12px] font-semibold rounded-md hover:bg-[#0C447C] transition-colors disabled:opacity-50"
+                className="px-4 sm:px-6 py-2 sm:py-2.5 bg-[#185FA5] text-white text-[11px] sm:text-[12px] font-semibold rounded-md hover:bg-[#0C447C] transition-colors disabled:opacity-50"
               >
                 {submitting ? 'Enviando...' : '✓ Finalizar'}
               </button>
