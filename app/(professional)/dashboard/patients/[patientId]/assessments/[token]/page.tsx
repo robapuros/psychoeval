@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import DashboardHeader from '@/components/dashboard/DashboardHeader';
 
 interface Response {
   questionNumber: number;
@@ -130,21 +131,23 @@ export default function AssessmentDetailsPage() {
 
   return (
     <div className="min-h-screen bg-[#F7F6F3]">
-      {/* Topbar */}
-      <div className="bg-white border-b border-[rgba(0,0,0,0.08)] px-4 h-[42px] flex items-center justify-between">
-        <button
-          onClick={() => router.push('/dashboard/patients')}
-          className="text-[12px] font-semibold text-[#185FA5] hover:text-[#0C447C] transition-colors"
-        >
-          ← Pacientes
-        </button>
-        <span className="text-[10px] uppercase tracking-wide font-semibold text-[#888780]">
-          Resultados de Evaluación
-        </span>
-      </div>
+      {/* Header con menú hamburguesa */}
+      <DashboardHeader 
+        title={`${instrument.shortName} - ${assessment.patient.fullName}`}
+        userEmail={session?.user?.email}
+      />
 
       {/* Content */}
       <div className="max-w-4xl mx-auto p-4 space-y-4">
+        {/* Botón de volver */}
+        <div>
+          <button
+            onClick={() => router.push(`/dashboard/patients/${assessment.patient.id}`)}
+            className="inline-flex items-center gap-2 px-3 py-1.5 text-[11px] font-medium border border-[rgba(0,0,0,0.13)] rounded-md hover:bg-[#F1EFE8] transition-colors"
+          >
+            ← Volver al paciente
+          </button>
+        </div>
         {/* Header Card */}
         <div className="bg-white rounded-xl border border-[rgba(0,0,0,0.08)] shadow-sm p-6">
           <div className="flex items-start justify-between mb-4">

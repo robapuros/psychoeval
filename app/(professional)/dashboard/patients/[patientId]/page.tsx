@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import DashboardHeader from '@/components/dashboard/DashboardHeader';
 
 interface Assessment {
   id: string;
@@ -150,18 +151,18 @@ export default function PatientProfilePage() {
 
   return (
     <div className="min-h-screen bg-[#F7F6F3]">
+      {/* Header con menú hamburguesa */}
+      <DashboardHeader title={patient.fullName} userEmail={session?.user?.email} />
+
       <div className="max-w-4xl mx-auto p-4 space-y-4">
-        {/* Header */}
-        <div className="flex items-center gap-3">
+        {/* Botón de volver */}
+        <div>
           <button
             onClick={() => router.push('/dashboard/patients')}
-            className="w-8 h-8 rounded-md border border-[rgba(0,0,0,0.13)] flex items-center justify-center hover:bg-[#F1EFE8] transition-colors"
+            className="inline-flex items-center gap-2 px-3 py-1.5 text-[11px] font-medium border border-[rgba(0,0,0,0.13)] rounded-md hover:bg-[#F1EFE8] transition-colors"
           >
-            ←
+            ← Volver a pacientes
           </button>
-          <h1 className="text-[16px] font-bold tracking-tight">
-            {patient.fullName}
-          </h1>
         </div>
 
         {/* Patient Info Card */}
