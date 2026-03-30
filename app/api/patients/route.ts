@@ -3,24 +3,41 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth/config';
 import { prisma } from '@/lib/prisma';
 
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 /**
  * GET /api/patients
  * Lista todos los pacientes del profesional autenticado
  */
 export async function GET(request: NextRequest) {
+  console.log('[/api/patients] GET request received');
+  
   try {
+    console.log('[/api/patients] Getting session...');
     const session = await getServerSession(authOptions);
+    
+    console.log('[/api/patients] Session:', {
+      hasSession: !!session,
+      userId: session?.user?.id,
+      userRole: session?.user?.role,
+    });
+    
     if (!session?.user?.id) {
+      console.log('[/api/patients] No session, returning 401');
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
     }
 
     if (session.user.role !== 'PROFESSIONAL') {
+      console.log('[/api/patients] Not a professional, returning 403');
       return NextResponse.json(
         { error: 'Solo profesionales pueden acceder a esta ruta' },
         { status: 403 }
       );
     }
 
+    console.log('[/api/patients] Querying database for professionalId:', session.user.id);
+    
     const patients = await prisma.patient.findMany({
       where: { professionalId: session.user.id },
       include: {
@@ -47,11 +64,17 @@ export async function GET(request: NextRequest) {
       orderBy: { createdAt: 'desc' },
     });
 
+    console.log('[/api/patients] Query successful, found:', patients.length, 'patients');
+
     return NextResponse.json({ patients });
   } catch (error) {
-    console.error('Error fetching patients:', error);
+    console.error('[/api/patients] Error:', error);
+    console.error('[/api/patients] Error stack:', error instanceof Error ? error.stack : 'No stack');
     return NextResponse.json(
-      { error: 'Error al obtener pacientes' },
+      { 
+        error: 'Error al obtener pacientes',
+        details: process.env.NODE_ENV === 'development' ? String(error) : undefined,
+      },
       { status: 500 }
     );
   }
