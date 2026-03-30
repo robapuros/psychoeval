@@ -51,7 +51,7 @@ export async function GET() {
       },
       database: {
         totalProfessionals: professionals.length,
-        professionals: professionals.map(p => ({
+        professionals: professionals.map((p: any) => ({
           id: p.id,
           email: p.email,
           name: p.name,
@@ -59,7 +59,7 @@ export async function GET() {
           patientCount: p._count.patients,
         })),
         totalPatients: allPatients.length,
-        patients: allPatients.map(p => ({
+        patients: allPatients.map((p: any) => ({
           id: p.id,
           name: p.fullName,
           professionalEmail: p.professional.email,
