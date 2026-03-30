@@ -128,8 +128,25 @@ export async function POST(
     const instrumentData = instrumentMap[assessment.instrumentType];
 
     const responseRecords = responses.map((r: any) => {
-      const question = instrumentData.questions.find((q: any) => q.number === r.questionNumber);
-      const option = question?.options?.find((o: any) => o.value === r.value);
+      // Encontrar la pregunta en el instrumento
+      let question: any = null;
+      
+      // Para la mayoría de instrumentos, questions es un array directo
+      if (Array.isArray(instrumentData.questions)) {
+        question = instrumentData.questions.find((q: any) => q.number === r.questionNumber);
+      } else {
+        // Para MEC, las preguntas están agrupadas en secciones
+        for (const section of instrumentData.questions || []) {
+          if (section.questions) {
+            question = section.questions.find((q: any) => q.number === r.questionNumber);
+            if (question) break;
+          }
+        }
+      }
+      
+      // Buscar el label de la respuesta
+      // responseOptions está a nivel de instrumento (PHQ9, GAD7, etc.)
+      const option = instrumentData.responseOptions?.find((o: any) => o.value === r.value);
       
       return {
         assessmentId: assessment.id,

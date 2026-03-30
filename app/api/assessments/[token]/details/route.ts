@@ -31,7 +31,7 @@ export async function GET(
 
     const { token } = params;
 
-    // Buscar evaluación
+    // Buscar evaluación CON respuestas
     const assessment = await prisma.assessment.findUnique({
       where: { token },
       include: {
@@ -48,6 +48,11 @@ export async function GET(
             id: true,
             name: true,
             specialty: true,
+          },
+        },
+        responses: {
+          orderBy: {
+            questionNumber: 'asc',
           },
         },
       },
@@ -93,40 +98,41 @@ export async function GET(
         );
     }
 
-    // Enriquecer respuestas con texto de preguntas
-    const enrichedResponses = assessment.responses
-      ? (assessment.responses as Array<{ questionNumber: number; value: number }>).map((response) => {
-          // MEC tiene estructura diferente (sections en lugar de questions directas)
-          let question: any = null;
-          let responseOptions: any = null;
+    // Mapear respuestas desde la tabla Response
+    const enrichedResponses = assessment.responses.map((response: any) => {
+      // Encontrar la pregunta en el instrumento para obtener la categoría
+      let question: any = null;
 
-          if ('sections' in instrumentData) {
-            // Para MEC: buscar en secciones
-            for (const section of (instrumentData as any).sections) {
-              question = section.items?.find((item: any) => item.number === response.questionNumber);
-              if (question) break;
-            }
-          } else {
-            // Para otros instrumentos: buscar directamente
-            question = (instrumentData as any).questions?.find(
-              (q: any) => q.number === response.questionNumber
-            );
+      if ('sections' in instrumentData) {
+        // Para MEC: buscar en secciones
+        for (const section of (instrumentData as any).sections) {
+          question = section.items?.find((item: any) => item.number === response.questionNumber);
+          if (question) break;
+        }
+      } else if (Array.isArray((instrumentData as any).questions)) {
+        // Para instrumentos con questions como array directo
+        question = (instrumentData as any).questions.find(
+          (q: any) => q.number === response.questionNumber
+        );
+      } else {
+        // Para MEC con estructura diferente
+        for (const section of (instrumentData as any).questions || []) {
+          if (section.questions) {
+            question = section.questions.find((q: any) => q.number === response.questionNumber);
+            if (question) break;
           }
-          
-          // Obtener opciones de respuesta (pueden ser específicas de la pregunta o globales)
-          responseOptions = (question as any)?.responseOptions || (instrumentData as any).responseOptions;
-          const selectedOption = responseOptions?.find((opt: any) => opt.value === response.value);
+        }
+      }
 
-          return {
-            questionNumber: response.questionNumber,
-            questionText: question?.text || '',
-            value: response.value,
-            valueLabel: selectedOption?.label || String(response.value),
-            category: (question as any)?.category || '',
-            critical: (question as any)?.critical || false,
-          };
-        })
-      : [];
+      return {
+        questionNumber: response.questionNumber,
+        questionText: response.questionText || question?.text || '',
+        value: response.responseValue,
+        valueLabel: response.responseText,
+        category: (question as any)?.category || '',
+        critical: (question as any)?.critical || false,
+      };
+    });
 
     return NextResponse.json({
       assessment: {
