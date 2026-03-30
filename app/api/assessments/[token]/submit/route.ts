@@ -181,8 +181,8 @@ export async function POST(
     // maxScore ya tenemos instrumentData de arriba
     const maxScore = instrumentData.scoring.range.max;
 
-    // Construir URL de resultados
-    const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
+    // Construir URL de resultados (limpiar trailing slash)
+    const baseUrl = (process.env.NEXTAUTH_URL || 'http://localhost:3000').replace(/\/+$/, '');
     const resultsUrl = `${baseUrl}/dashboard/patients/${assessment.patientId}/assessments/${token}`;
 
     // Enviar notificaciones por email al profesional

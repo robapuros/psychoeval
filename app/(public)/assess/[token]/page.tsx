@@ -254,22 +254,22 @@ export default function AssessmentPage() {
             )}
           </div>
         </div>
+      </div>
 
-        {/* Footer */}
-        <div className="mt-6 text-center pb-4">
-          <p className="text-[10px] text-[#888780]">
-            <a
-              href="/licencias"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-[#185FA5] transition-colors"
-            >
-              Instrumentos y Licencias
-            </a>
-            {' • '}
-            PsicoEvalúa © 2026
-          </p>
-        </div>
+      {/* Footer - fuera del contenedor flex-1 para que se posicione abajo */}
+      <div className="w-full text-center py-4 px-4">
+        <p className="text-[10px] text-[#888780]">
+          <a
+            href="/licencias"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-[#185FA5] transition-colors"
+          >
+            Instrumentos y Licencias
+          </a>
+          {' • '}
+          PsicoEvalúa © 2026
+        </p>
       </div>
     </div>
   );

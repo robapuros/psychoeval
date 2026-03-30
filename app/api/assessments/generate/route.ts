@@ -107,8 +107,8 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Construir URL del cuestionario
-    const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
+    // Construir URL del cuestionario (limpiar trailing slash)
+    const baseUrl = (process.env.NEXTAUTH_URL || 'http://localhost:3000').replace(/\/+$/, '');
     const assessmentUrl = `${baseUrl}/assess/${token}`;
 
     // Obtener información del instrumento para el email
