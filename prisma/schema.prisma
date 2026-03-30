@@ -18,15 +18,15 @@ enum Role {
 
 // Professional (Psychologist, Therapist, etc.)
 model Professional {
-  id             String   @id @default(uuid())
-  email          String   @unique
-  password_hash  String
-  name           String
-  role           Role     @default(PROFESSIONAL)
-  specialty      String?
-  license_number String?
-  created_at     DateTime @default(now())
-  updated_at     DateTime @updatedAt
+  id            String   @id @default(uuid())
+  email         String   @unique
+  passwordHash  String   @map("password_hash")
+  name          String
+  role          Role     @default(PROFESSIONAL)
+  specialty     String?
+  licenseNumber String?  @map("license_number")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
 
   // Relations
   patients    Patient[]
@@ -37,20 +37,20 @@ model Professional {
 
 // Patient
 model Patient {
-  id              String   @id @default(uuid())
-  professional_id String
-  name            String
-  email           String?
-  phone           String?
-  notes           String?  @db.Text
-  created_at      DateTime @default(now())
-  updated_at      DateTime @updatedAt
+  id             String   @id @default(uuid())
+  professionalId String   @map("professional_id")
+  fullName       String   @map("name")
+  email          String?
+  phone          String?
+  notes          String?  @db.Text
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
 
   // Relations
-  professional Professional @relation(fields: [professional_id], references: [id], onDelete: Cascade)
+  professional Professional @relation(fields: [professionalId], references: [id], onDelete: Cascade)
   assessments  Assessment[]
 
-  @@index([professional_id])
+  @@index([professionalId])
   @@map("patients")
 }
 
@@ -72,45 +72,45 @@ enum AssessmentStatus {
 
 // Assessment (Questionnaire Instance)
 model Assessment {
-  id                String           @id @default(uuid())
-  token             String           @unique @default(cuid())
-  patient_id        String
-  professional_id   String
-  instrument_type   InstrumentType
-  status            AssessmentStatus @default(PENDING)
-  created_at        DateTime         @default(now())
-  expires_at        DateTime
-  completed_at      DateTime?
-  score             Int?
-  severity          String?
-  has_critical_item Boolean          @default(false)
+  id               String           @id @default(uuid())
+  token            String           @unique @default(cuid())
+  patientId        String           @map("patient_id")
+  professionalId   String           @map("professional_id")
+  instrumentType   InstrumentType   @map("instrument_type")
+  status           AssessmentStatus @default(PENDING)
+  createdAt        DateTime         @default(now()) @map("created_at")
+  expiresAt        DateTime         @map("expires_at")
+  completedAt      DateTime?        @map("completed_at")
+  score            Int?
+  severity         String?
+  hasCriticalAlert Boolean          @default(false) @map("has_critical_item")
 
   // Relations
-  patient      Patient      @relation(fields: [patient_id], references: [id], onDelete: Cascade)
-  professional Professional @relation(fields: [professional_id], references: [id], onDelete: Cascade)
+  patient      Patient      @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  professional Professional @relation(fields: [professionalId], references: [id], onDelete: Cascade)
   responses    Response[]
 
   @@index([token])
-  @@index([patient_id])
-  @@index([professional_id])
+  @@index([patientId])
+  @@index([professionalId])
   @@index([status])
-  @@index([expires_at])
+  @@index([expiresAt])
   @@map("assessments")
 }
 
 // Individual Question Response
 model Response {
-  id              String   @id @default(uuid())
-  assessment_id   String
-  question_number Int
-  question_text   String   @db.Text
-  response_value  Int
-  response_text   String?  @db.Text
-  created_at      DateTime @default(now())
+  id             String   @id @default(uuid())
+  assessmentId   String   @map("assessment_id")
+  questionNumber Int      @map("question_number")
+  questionText   String   @map("question_text") @db.Text
+  responseValue  Int      @map("response_value")
+  responseText   String?  @map("response_text") @db.Text
+  createdAt      DateTime @default(now()) @map("created_at")
 
   // Relations
-  assessment Assessment @relation(fields: [assessment_id], references: [id], onDelete: Cascade)
+  assessment Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
 
-  @@index([assessment_id])
+  @@index([assessmentId])
   @@map("responses")
 }
