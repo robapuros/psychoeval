@@ -16,7 +16,7 @@ const registerSchema = z.object({
     .regex(/[0-9]/, 'Password must contain at least one number'),
   name: z.string().min(2, 'Name must be at least 2 characters'),
   specialty: z.string().optional(),
-  license_number: z.string().optional(),
+  licenseNumber: z.string().optional(),
 });
 
 export async function POST(request: Request) {
@@ -39,23 +39,23 @@ export async function POST(request: Request) {
     }
 
     // Hash password
-    const password_hash = await hash(validatedData.password, 12);
+    const passwordHash = await hash(validatedData.password, 12);
 
     // Create professional
     const professional = await db.professional.create({
       data: {
         email: validatedData.email.toLowerCase(),
-        password_hash,
+        passwordHash,
         name: validatedData.name,
         specialty: validatedData.specialty,
-        license_number: validatedData.license_number,
+        licenseNumber: validatedData.licenseNumber,
       },
       select: {
         id: true,
         email: true,
         name: true,
         specialty: true,
-        created_at: true,
+        createdAt: true,
       },
     });
 

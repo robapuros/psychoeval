@@ -12,7 +12,7 @@ async function main() {
     update: {},
     create: {
       email: 'admin@psicoevalua.com',
-      password_hash: await hash('Admin1234!', 12),
+      passwordHash: await hash('Admin1234!', 12),
       name: 'Administrador Principal',
       role: 'ADMIN',
       specialty: 'Administración del Sistema',
@@ -27,11 +27,11 @@ async function main() {
     update: {},
     create: {
       email: 'psicologo@psicoevalua.com',
-      password_hash: await hash('Test1234!', 12),
+      passwordHash: await hash('Test1234!', 12),
       name: 'Dr. Juan Pérez',
       role: 'PROFESSIONAL',
       specialty: 'Psicología Clínica',
-      license_number: 'PSI-12345',
+      licenseNumber: 'PSI-12345',
     },
   });
 
@@ -40,8 +40,8 @@ async function main() {
   // Create test patients
   const patient1 = await prisma.patient.create({
     data: {
-      professional_id: professional.id,
-      name: 'García Martín, Luis',
+      professionalId: professional.id,
+      fullName: 'García Martín, Luis',
       email: 'luis.garcia@example.com',
       phone: '+34 600 000 001',
       notes: 'Derivación: Ansiedad generalizada. Primera consulta pendiente.',
@@ -50,23 +50,23 @@ async function main() {
 
   const patient2 = await prisma.patient.create({
     data: {
-      professional_id: professional.id,
-      name: 'Fernández López, Ana',
+      professionalId: professional.id,
+      fullName: 'Fernández López, Ana',
       email: 'ana.fernandez@example.com',
       phone: '+34 600 000 002',
       notes: 'Seguimiento trimestral. Evolución positiva.',
     },
   });
 
-  console.log('✅ Creados pacientes de prueba:', patient1.name, patient2.name);
+  console.log('✅ Creados pacientes de prueba:', patient1.fullName, patient2.fullName);
 
   // Create a test assessment
   const assessment = await prisma.assessment.create({
     data: {
-      patient_id: patient1.id,
-      professional_id: professional.id,
-      instrument_type: 'PHQ9',
-      expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 días
+      patientId: patient1.id,
+      professionalId: professional.id,
+      instrumentType: 'PHQ9',
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 días
     },
   });
 
