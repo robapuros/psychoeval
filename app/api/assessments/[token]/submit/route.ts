@@ -117,27 +117,50 @@ export async function POST(
       }
     }
 
-    // Actualizar evaluación en base de datos
-    const updatedAssessment = await prisma.assessment.update({
-      where: { id: assessment.id },
-      data: {
-        status: 'COMPLETED',
-        completedAt: new Date(),
-        score: scoringResult.totalScore,
-        severity: scoringResult.severity,
-        hasCriticalAlert,
-      },
-    });
-
-    // Obtener información del instrumento
-    const instrumentMap: Record<string, any> = {
+    // Guardar respuestas individuales en la base de datos
+    const instrumentData = {
       PHQ9: phq9Data,
       GAD7: gad7Data,
       PCL5: pcl5Data,
       AUDIT: auditData,
       MEC: mecData,
-    };
-    const instrumentData = instrumentMap[assessment.instrumentType];
+    }[assessment.instrumentType];
+
+    const responseRecords = responses.map((r: any) => {
+      const question = instrumentData.questions.find((q: any) => q.number === r.questionNumber);
+      const option = question?.options?.find((o: any) => o.value === r.value);
+      
+      return {
+        assessmentId: assessment.id,
+        questionNumber: r.questionNumber,
+        questionText: question?.text || '',
+        responseValue: r.value,
+        responseText: option?.label || String(r.value),
+      };
+    });
+
+    // Usar transacción para guardar respuestas y actualizar assessment
+    const [savedResponses, updatedAssessment] = await prisma.$transaction([
+      // Guardar todas las respuestas
+      prisma.response.createMany({
+        data: responseRecords,
+      }),
+      // Actualizar assessment
+      prisma.assessment.update({
+        where: { id: assessment.id },
+        data: {
+          status: 'COMPLETED',
+          completedAt: new Date(),
+          score: scoringResult.totalScore,
+          severity: scoringResult.severity,
+          hasCriticalAlert,
+        },
+      }),
+    ]);
+
+    console.log(`✅ Saved ${responseRecords.length} responses for assessment ${assessment.id}`);
+
+    // maxScore ya tenemos instrumentData de arriba
     const maxScore = instrumentData.scoring.range.max;
 
     // Construir URL de resultados
