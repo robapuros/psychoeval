@@ -39,6 +39,7 @@ interface Instrument {
   category: string;
   description: string;
   scoring: any;
+  questions: any[];
 }
 
 export default function AssessmentDetailsPage() {
@@ -51,7 +52,7 @@ export default function AssessmentDetailsPage() {
   const [instrument, setInstrument] = useState<Instrument | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [showResponses, setShowResponses] = useState(true);
+  const [showResponses, setShowResponses] = useState(false);
 
   useEffect(() => {
     loadAssessment();
@@ -118,10 +119,6 @@ export default function AssessmentDetailsPage() {
     );
   }
 
-  const scorePercentage = assessment.score
-    ? (assessment.score / instrument.scoring.range.max) * 100
-    : 0;
-
   const severityInfo = instrument.scoring.interpretation?.find(
     (level: any) =>
       assessment.score !== null &&
@@ -129,145 +126,232 @@ export default function AssessmentDetailsPage() {
       assessment.score <= level.max
   );
 
+  // Calcular percentil (simplificado)
+  const percentile = assessment.score 
+    ? Math.round((assessment.score / instrument.scoring.range.max) * 100)
+    : 0;
+
+  // Agrupar respuestas por categoría
+  const categoryScores: Record<string, { name: string; score: number; max: number }> = {};
+  
+  if (assessment.responses.length > 0 && instrument.questions) {
+    // Mapeo de categorías a nombres legibles
+    const categoryNames: Record<string, string> = {
+      anhedonia: 'Anhedonia',
+      estado_animo: 'Estado de ánimo',
+      sueño: 'Sueño',
+      energia: 'Energía',
+      apetito: 'Apetito',
+      autoestima: 'Autoestima',
+      concentracion: 'Concentración',
+      psicomotor: 'Actividad psicomotora',
+      ideacion_suicida: 'Ideación (Ítem 9)'
+    };
+
+    assessment.responses.forEach((response) => {
+      const question = instrument.questions.find(q => q.number === response.questionNumber);
+      if (question && question.category) {
+        if (!categoryScores[question.category]) {
+          categoryScores[question.category] = {
+            name: categoryNames[question.category] || question.category,
+            score: 0,
+            max: 0
+          };
+        }
+        categoryScores[question.category].score += response.value;
+        categoryScores[question.category].max += 3; // max por pregunta es 3
+      }
+    });
+  }
+
+  // Encontrar respuesta crítica
+  const criticalResponse = assessment.responses.find(
+    r => r.critical && r.value > 0
+  );
+
   return (
     <div className="min-h-screen bg-[#F7F6F3]">
-      {/* Header con menú hamburguesa */}
       <DashboardHeader 
         title={`${instrument.shortName} - ${assessment.patient.fullName}`}
         userEmail={session?.user?.email}
       />
 
-      {/* Content */}
-      <div className="max-w-4xl mx-auto p-4 space-y-4">
+      <div className="max-w-4xl mx-auto p-6 space-y-6">
         {/* Botón de volver */}
-        <div>
-          <button
-            onClick={() => router.push(`/dashboard/patients/${assessment.patient.id}`)}
-            className="inline-flex items-center gap-2 px-3 py-1.5 text-[11px] font-medium border border-[rgba(0,0,0,0.13)] rounded-md hover:bg-[#F1EFE8] transition-colors"
-          >
-            ← Volver al paciente
-          </button>
-        </div>
-        {/* Header Card */}
-        <div className="bg-white rounded-xl border border-[rgba(0,0,0,0.08)] shadow-sm p-6">
-          <div className="flex items-start justify-between mb-4">
-            <div>
-              <h1 className="text-[18px] font-bold tracking-tight mb-1">
-                {assessment.patient.fullName}
-              </h1>
-              <p className="text-[11px] text-[#888780]">
-                {instrument.name} ({instrument.shortName})
-              </p>
-            </div>
-            <div className="text-right">
-              <p className="text-[9px] uppercase tracking-wide font-semibold text-[#888780] mb-1">
-                Completado
-              </p>
-              <p className="text-[11px] font-semibold">
-                {assessment.completedAt
-                  ? new Date(assessment.completedAt).toLocaleDateString('es-ES', {
-                      day: 'numeric',
-                      month: 'long',
-                      year: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })
-                  : '—'}
-              </p>
+        <button
+          onClick={() => router.push(`/dashboard/patients/${assessment.patient.id}`)}
+          className="inline-flex items-center gap-2 px-3 py-1.5 text-[11px] font-medium text-[#185FA5] hover:text-[#0C447C] transition-colors"
+        >
+          ← Volver
+        </button>
+
+        {/* Puntuación Total Card */}
+        <div className="bg-white rounded-lg border border-[rgba(0,0,0,0.1)] p-8">
+          <div className="flex items-baseline gap-3 mb-2">
+            <h1 className="text-[48px] font-bold tracking-tight leading-none">
+              {assessment.score}/<span className="text-[32px] text-[#888780]">{instrument.scoring.range.max}</span>
+            </h1>
+            <div className="flex flex-col">
+              <span 
+                className="text-[20px] font-bold mb-1"
+                style={{ color: severityInfo?.color || '#1A1917' }}
+              >
+                {severityInfo?.severity || assessment.severity}
+              </span>
+              <span className="text-[12px] text-[#888780]">
+                Percentil {percentile}
+              </span>
             </div>
           </div>
+          
+          <p className="text-[11px] text-[#888780] mb-4">
+            Completado el {assessment.completedAt
+              ? new Date(assessment.completedAt).toLocaleDateString('es-ES', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })
+              : '—'}
+          </p>
 
-          {/* Score Display */}
-          <div className="border-t border-[rgba(0,0,0,0.08)] pt-4">
-            <div className="flex items-center gap-6">
-              {/* Score Circle */}
-              <div className="relative w-32 h-32 flex-shrink-0">
-                <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                  <circle
-                    cx="50"
-                    cy="50"
-                    r="40"
-                    fill="none"
-                    stroke="#F1EFE8"
-                    strokeWidth="8"
-                  />
-                  <circle
-                    cx="50"
-                    cy="50"
-                    r="40"
-                    fill="none"
-                    stroke={severityInfo?.color || '#185FA5'}
-                    strokeWidth="8"
-                    strokeDasharray={`${scorePercentage * 2.51} 251`}
-                    strokeLinecap="round"
-                  />
-                </svg>
-                <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <span className="text-[28px] font-bold tracking-tight">
-                    {assessment.score}
-                  </span>
-                  <span className="text-[10px] text-[#888780] font-mono">
-                    / {instrument.scoring.range.max}
-                  </span>
-                </div>
-              </div>
-
-              {/* Interpretation */}
-              <div className="flex-1">
-                <div className="mb-3">
-                  <p className="text-[9px] uppercase tracking-wide font-semibold text-[#888780] mb-1">
-                    Severidad
-                  </p>
-                  <span
-                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-[12px] font-semibold"
-                    style={{
-                      backgroundColor: `${severityInfo?.color}20`,
-                      color: severityInfo?.color,
-                    }}
-                  >
-                    {assessment.hasCriticalAlert && '⚠️ '}
-                    {severityInfo?.label || assessment.severity}
-                  </span>
-                </div>
-                
+          {/* Alerta Crítica */}
+          {assessment.hasCriticalAlert && criticalResponse && (
+            <div className="mt-4 p-4 bg-[#FCEBEB] border-l-4 border-[#E24B4A] rounded">
+              <div className="flex items-start gap-3">
+                <span className="text-[20px]">⚠️</span>
                 <div>
-                  <p className="text-[9px] uppercase tracking-wide font-semibold text-[#888780] mb-1">
-                    Recomendación Clínica
+                  <p className="text-[12px] font-bold text-[#A32D2D] mb-1">
+                    ALERTA CRÍTICA - Ítem {criticalResponse.questionNumber}
                   </p>
-                  <p className="text-[11px] text-[#1A1917] leading-relaxed">
-                    {severityInfo?.action || 'Consultar interpretación del manual'}
+                  <p className="text-[11px] text-[#A32D2D] mb-2">
+                    {criticalResponse.questionText}
+                  </p>
+                  <p className="text-[10px] font-semibold text-[#A32D2D]">
+                    Respuesta: {criticalResponse.valueLabel}
                   </p>
                 </div>
               </div>
-            </div>
-          </div>
-
-          {/* Critical Alert */}
-          {assessment.hasCriticalAlert && (
-            <div className="mt-4 p-4 bg-[#FCEBEB] border border-[#E24B4A] rounded-lg">
-              <p className="text-[11px] font-semibold text-[#A32D2D] mb-1">
-                ⚠️ ALERTA: Ítem crítico detectado
-              </p>
-              <p className="text-[10px] text-[#A32D2D]">
-                {assessment.instrumentType === 'PHQ9' && assessment.criticalItems?.includes(9)
-                  ? 'El paciente ha reportado pensamientos de que estaría mejor muerto/a o de hacerse daño. Se recomienda evaluación inmediata del riesgo suicida.'
-                  : 'Se ha detectado una respuesta que requiere atención clínica inmediata.'}
-              </p>
             </div>
           )}
         </div>
 
-        {/* Responses Card */}
-        <div className="bg-white rounded-xl border border-[rgba(0,0,0,0.08)] shadow-sm overflow-hidden">
+        {/* Perfil por Áreas */}
+        {Object.keys(categoryScores).length > 0 && (
+          <div className="bg-white rounded-lg border border-[rgba(0,0,0,0.1)] p-6">
+            <h2 className="text-[14px] font-bold mb-4">Perfil por áreas</h2>
+            <div className="space-y-3">
+              {Object.entries(categoryScores).map(([key, data]) => {
+                const percentage = (data.score / data.max) * 100;
+                const isIdeacion = key === 'ideacion_suicida';
+                
+                return (
+                  <div key={key}>
+                    <div className="flex items-center justify-between mb-1">
+                      <span className={`text-[11px] font-medium ${isIdeacion && data.score > 0 ? 'text-[#A32D2D]' : 'text-[#1A1917]'}`}>
+                        {data.name}
+                      </span>
+                      <span className="text-[11px] font-mono text-[#888780]">
+                        {data.score}/{data.max}
+                      </span>
+                    </div>
+                    <div className="w-full bg-[#F1EFE8] rounded-full h-3 overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-all ${
+                          isIdeacion && data.score > 0
+                            ? 'bg-[#E24B4A]'
+                            : 'bg-[#185FA5]'
+                        }`}
+                        style={{ width: `${percentage}%` }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Baremo de Interpretación */}
+        <div className="bg-white rounded-lg border border-[rgba(0,0,0,0.1)] p-6">
+          <h2 className="text-[14px] font-bold mb-4">Baremo de interpretación</h2>
+          
+          {/* Escala visual */}
+          <div className="relative mb-6">
+            <div className="flex h-10 rounded overflow-hidden">
+              {instrument.scoring.interpretation.map((level: any, index: number) => {
+                const width = ((level.max - level.min + 1) / (instrument.scoring.range.max + 1)) * 100;
+                
+                return (
+                  <div
+                    key={index}
+                    className="flex items-center justify-center text-[9px] font-bold text-white border-r border-white last:border-r-0"
+                    style={{
+                      width: `${width}%`,
+                      backgroundColor: level.color
+                    }}
+                  >
+                    {level.min}-{level.max}
+                  </div>
+                );
+              })}
+            </div>
+            
+            {/* Indicador de puntuación actual */}
+            {assessment.score !== null && (
+              <div
+                className="absolute top-0 h-10 flex items-center"
+                style={{
+                  left: `${(assessment.score / instrument.scoring.range.max) * 100}%`,
+                  transform: 'translateX(-50%)'
+                }}
+              >
+                <div className="w-1 h-full bg-black"></div>
+                <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black text-white px-2 py-1 rounded text-[10px] font-bold whitespace-nowrap">
+                  {assessment.score}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Leyenda */}
+          <div className="space-y-2">
+            {instrument.scoring.interpretation.map((level: any, index: number) => (
+              <div key={index} className="flex items-start gap-3">
+                <div
+                  className="w-4 h-4 rounded flex-shrink-0 mt-0.5"
+                  style={{ backgroundColor: level.color }}
+                />
+                <div className="flex-1">
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-[11px] font-semibold">
+                      {level.severity}
+                    </span>
+                    <span className="text-[10px] text-[#888780] font-mono">
+                      ({level.min}-{level.max} puntos)
+                    </span>
+                  </div>
+                  <p className="text-[10px] text-[#888780] mt-0.5">
+                    {level.action}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Respuestas Detalladas (Colapsable) */}
+        <div className="bg-white rounded-lg border border-[rgba(0,0,0,0.1)] overflow-hidden">
           <button
             onClick={() => setShowResponses(!showResponses)}
-            className="w-full px-4 py-3 bg-[#F1EFE8] border-b border-[rgba(0,0,0,0.08)] flex items-center justify-between hover:bg-[#E8E6DF] transition-colors"
+            className="w-full px-6 py-4 flex items-center justify-between hover:bg-[#F7F6F3] transition-colors"
           >
-            <h2 className="text-[12px] font-bold tracking-tight">
-              Respuestas Detalladas ({assessment.responses.length})
+            <h2 className="text-[14px] font-bold">
+              Respuestas detalladas ({assessment.responses.length})
             </h2>
             <svg
-              className={`w-4 h-4 transition-transform ${showResponses ? 'rotate-180' : ''}`}
+              className={`w-5 h-5 transition-transform ${showResponses ? 'rotate-180' : ''}`}
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -282,39 +366,34 @@ export default function AssessmentDetailsPage() {
           </button>
 
           {showResponses && (
-            <div className="divide-y divide-[rgba(0,0,0,0.08)]">
+            <div className="border-t border-[rgba(0,0,0,0.1)] divide-y divide-[rgba(0,0,0,0.08)]">
               {assessment.responses.map((response) => (
                 <div
                   key={response.questionNumber}
-                  className={`px-4 py-3 ${
+                  className={`px-6 py-4 ${
                     response.critical && response.value > 0 ? 'bg-[#FFF9F9]' : ''
                   }`}
                 >
                   <div className="flex items-start gap-3">
-                    <span className="flex-shrink-0 w-8 h-8 rounded-full bg-[#185FA5] text-white text-[11px] font-bold flex items-center justify-center">
+                    <span className="flex-shrink-0 w-7 h-7 rounded-full bg-[#185FA5] text-white text-[11px] font-bold flex items-center justify-center">
                       {response.questionNumber}
                     </span>
                     <div className="flex-1">
-                      <p className="text-[11px] font-semibold text-[#1A1917] mb-2">
+                      <p className="text-[11px] font-medium text-[#1A1917] mb-2">
                         {response.questionText}
                         {response.critical && (
                           <span className="ml-2 text-[#E24B4A]">⚠️</span>
                         )}
                       </p>
-                      <div className="flex items-center gap-2">
-                        <span className="text-[10px] text-[#888780] uppercase tracking-wide">
-                          Respuesta:
-                        </span>
-                        <span
-                          className={`inline-flex items-center px-2 py-1 rounded text-[10px] font-semibold ${
-                            response.critical && response.value > 0
-                              ? 'bg-[#FCEBEB] text-[#A32D2D]'
-                              : 'bg-[#F1EFE8] text-[#5F5E5A]'
-                          }`}
-                        >
-                          {response.valueLabel} ({response.value})
-                        </span>
-                      </div>
+                      <span
+                        className={`inline-flex items-center px-3 py-1 rounded text-[10px] font-semibold ${
+                          response.critical && response.value > 0
+                            ? 'bg-[#FCEBEB] text-[#A32D2D]'
+                            : 'bg-[#F1EFE8] text-[#5F5E5A]'
+                        }`}
+                      >
+                        {response.valueLabel} ({response.value} puntos)
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -323,17 +402,17 @@ export default function AssessmentDetailsPage() {
           )}
         </div>
 
-        {/* Actions */}
-        <div className="flex gap-2">
+        {/* Acciones */}
+        <div className="flex gap-3">
           <button
-            onClick={() => router.push('/dashboard/patients')}
-            className="flex-1 px-4 py-2 text-[11px] font-semibold border border-[rgba(0,0,0,0.13)] rounded-md hover:bg-[#F1EFE8] transition-colors"
+            onClick={() => router.push(`/dashboard/patients/${assessment.patient.id}`)}
+            className="flex-1 px-4 py-3 text-[12px] font-semibold border border-[rgba(0,0,0,0.13)] rounded-lg hover:bg-[#F1EFE8] transition-colors"
           >
-            ← Volver al dashboard
+            ← Volver al paciente
           </button>
           <button
             onClick={() => alert('Exportar a PDF (próximamente)')}
-            className="flex-1 px-4 py-2 text-[11px] font-semibold bg-[#185FA5] text-white rounded-md hover:bg-[#0C447C] transition-colors"
+            className="flex-1 px-4 py-3 text-[12px] font-semibold bg-[#185FA5] text-white rounded-lg hover:bg-[#0C447C] transition-colors"
           >
             📄 Exportar PDF
           </button>
