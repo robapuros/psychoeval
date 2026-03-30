@@ -100,7 +100,7 @@ export default function AssessmentDetailsPage() {
     );
   }
 
-  if (assessment.status !== 'completed') {
+  if (assessment.status !== 'COMPLETED') {
     return (
       <div className="min-h-screen bg-[#F7F6F3] flex items-center justify-center">
         <div className="text-center">
