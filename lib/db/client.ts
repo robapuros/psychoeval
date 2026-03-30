@@ -15,13 +15,35 @@ const createPrismaClient = () => {
     return null as any; // Type workaround for build
   }
   
-  // NOTE: If you see "prepared statement already exists" errors in production:
-  // This is a known issue with Prisma + Vercel + direct PostgreSQL connections.
-  // Solution: Use a pooled connection (pgbouncer).
-  // See VERCEL-FIX-REQUIRED.md for detailed instructions.
+  // FIX: Disable prepared statements for pgbouncer transaction mode
+  // Supabase pooler (port 6543) doesn't support prepared statements
+  // Solution: Add pgbouncer=true AND statement_cache_size=0 to URL
+  let databaseUrl = process.env.DATABASE_URL;
+  
+  // If using Supabase pooler or pgbouncer, ensure proper params
+  if (databaseUrl.includes('pooler.supabase.com') || databaseUrl.includes('pgbouncer=true')) {
+    console.log('[prisma] Detected pgbouncer connection - disabling prepared statements');
+    
+    const url = new URL(databaseUrl.replace('postgresql://', 'http://'));
+    
+    // Add required parameters for pgbouncer transaction mode
+    if (!url.searchParams.has('pgbouncer')) {
+      url.searchParams.set('pgbouncer', 'true');
+    }
+    if (!url.searchParams.has('statement_cache_size')) {
+      url.searchParams.set('statement_cache_size', '0');
+    }
+    
+    databaseUrl = url.toString().replace('http://', 'postgresql://');
+  }
   
   return new PrismaClient({
     log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+    datasources: {
+      db: {
+        url: databaseUrl,
+      },
+    },
   });
 };
 
