@@ -24,7 +24,7 @@ export const authOptions: NextAuthOptions = {
           throw new Error('Email o contraseña incorrectos');
         }
 
-        const isValid = await compare(credentials.password, professional.password_hash);
+        const isValid = await compare(credentials.password, professional.passwordHash);
 
         if (!isValid) {
           throw new Error('Email o contraseña incorrectos');

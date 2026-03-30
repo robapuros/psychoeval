@@ -102,6 +102,11 @@ export async function POST(request: NextRequest) {
     }
 
     // Crear paciente
+    console.log('Creating patient with data:', {
+      fullName: fullName.trim(),
+      professionalId: session.user.id,
+    });
+
     const patient = await prisma.patient.create({
       data: {
         fullName: fullName.trim(),
@@ -111,6 +116,8 @@ export async function POST(request: NextRequest) {
         professionalId: session.user.id,
       },
     });
+
+    console.log('Patient created successfully:', patient.id);
 
     return NextResponse.json({
       success: true,
@@ -125,8 +132,12 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('Error creating patient:', error);
+    console.error('Error details:', JSON.stringify(error, null, 2));
     return NextResponse.json(
-      { error: 'Error al crear paciente' },
+      { 
+        error: 'Error al crear paciente',
+        details: process.env.NODE_ENV === 'development' ? String(error) : undefined
+      },
       { status: 500 }
     );
   }
