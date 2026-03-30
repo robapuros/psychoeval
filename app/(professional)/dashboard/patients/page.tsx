@@ -101,7 +101,7 @@ export default function PatientsPage() {
           <div className="text-[10px] text-[#888780]">Gestión de casos clínicos</div>
         </div>
 
-        {/* Patient Cards */}
+        {/* Table */}
         {patients.length === 0 ? (
           <div className="bg-white border border-[rgba(0,0,0,0.08)] rounded-xl p-8 text-center">
             <p className="text-[12px] text-[#888780] mb-4">
@@ -115,188 +115,93 @@ export default function PatientsPage() {
             </button>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="bg-white border border-[rgba(0,0,0,0.08)] rounded-xl overflow-hidden">
+            {/* Header */}
+            <div className="grid grid-cols-[2fr_1fr_1fr_1fr_120px] gap-4 px-3.5 py-1.5 bg-[#F1EFE8] border-b border-[rgba(0,0,0,0.08)]">
+              <span className="text-[9px] font-bold uppercase tracking-wide text-[#888780]">Paciente</span>
+              <span className="text-[9px] font-bold uppercase tracking-wide text-[#888780]">Último test</span>
+              <span className="text-[9px] font-bold uppercase tracking-wide text-[#888780]">Fecha</span>
+              <span className="text-[9px] font-bold uppercase tracking-wide text-[#888780]">Estado</span>
+              <span></span>
+            </div>
+
+            {/* Rows */}
             {patients.map((patient) => {
               const lastAssessment = patient.assessments[0];
               const hasAlert = lastAssessment?.hasCriticalAlert;
-              const hasPending = lastAssessment?.status === 'PENDING';
               
-              // Determinar estado visual
-              let statusConfig = {
-                label: 'Sin evaluación',
-                icon: '📋',
-                bg: 'bg-[#E1F5EE]',
-                text: 'text-[#0F6E56]',
-                border: 'border-[#A5D9C7]'
-              };
-
-              if (hasAlert) {
-                statusConfig = {
-                  label: '⚠️ Urgente - Requiere atención',
-                  icon: '🚨',
-                  bg: 'bg-[#FCEBEB]',
-                  text: 'text-[#A32D2D]',
-                  border: 'border-[#E24B4A]'
-                };
-              } else if (hasPending) {
-                statusConfig = {
-                  label: 'Evaluación pendiente',
-                  icon: '⏳',
-                  bg: 'bg-[#F1EFE8]',
-                  text: 'text-[#888780]',
-                  border: 'border-[#D1CFC7]'
-                };
-              } else if (lastAssessment?.status === 'COMPLETED') {
-                if (lastAssessment.severity === 'Severa' || lastAssessment.severity === 'Moderadamente severa') {
-                  statusConfig = {
-                    label: `${lastAssessment.severity}`,
-                    icon: '🔴',
-                    bg: 'bg-[#FCEBEB]',
-                    text: 'text-[#A32D2D]',
-                    border: 'border-[#E9ACA9]'
-                  };
-                } else if (lastAssessment.severity === 'Moderada') {
-                  statusConfig = {
-                    label: 'Depresión moderada',
-                    icon: '🟡',
-                    bg: 'bg-[#FAEEDA]',
-                    text: 'text-[#854F0B]',
-                    border: 'border-[#E8C480]'
-                  };
-                } else if (lastAssessment.severity) {
-                  statusConfig = {
-                    label: lastAssessment.severity,
-                    icon: '🟢',
-                    bg: 'bg-[#E1F5EE]',
-                    text: 'text-[#0F6E56]',
-                    border: 'border-[#A5D9C7]'
-                  };
-                }
-              }
-
-              // Determinar CTA principal
-              const primaryAction = hasAlert
-                ? { label: '🚨 Ver resultados urgentes', onClick: () => router.push(`/dashboard/patients/${patient.id}`) }
-                : hasPending
-                ? { label: '📩 Recordar evaluación', onClick: () => alert('Próximamente: recordatorio automático') }
-                : lastAssessment
-                ? { label: '📊 Ver historial', onClick: () => router.push(`/dashboard/patients/${patient.id}`) }
-                : { label: '📝 Enviar primera evaluación', onClick: () => handleSendAssessment(patient) };
-
               return (
                 <div
                   key={patient.id}
-                  className="bg-white border border-[rgba(0,0,0,0.08)] rounded-lg hover:shadow-md transition-all overflow-hidden"
+                  className="grid grid-cols-[2fr_1fr_1fr_1fr_120px] gap-4 px-3.5 py-2 border-b border-[rgba(0,0,0,0.08)] last:border-b-0 items-center hover:bg-[#F1EFE8] transition-colors"
                 >
-                  <div className="p-4">
-                    <div className="flex items-start gap-4">
-                      {/* Estado (Prominente - Izquierda) */}
-                      <div className="flex-shrink-0">
-                        <div className={`${statusConfig.bg} ${statusConfig.text} border-2 ${statusConfig.border} rounded-lg px-4 py-3 min-w-[180px]`}>
-                          <div className="text-[20px] mb-1">{statusConfig.icon}</div>
-                          <div className="text-[11px] font-bold leading-tight">
-                            {statusConfig.label}
-                          </div>
-                        </div>
+                  <div>
+                    <button
+                      onClick={() => router.push(`/dashboard/patients/${patient.id}`)}
+                      className="text-left hover:underline"
+                    >
+                      <div className="text-[11px] font-semibold text-[#185FA5]">
+                        {patient.fullName}
                       </div>
-
-                      {/* Información del Paciente */}
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-start justify-between mb-2">
-                          <div>
-                            <h3 className="text-[14px] font-bold text-[#1A1917] mb-1">
-                              {patient.fullName}
-                            </h3>
-                            <div className="flex items-center gap-3 text-[10px] text-[#888780]">
-                              {patient.email && (
-                                <span className="flex items-center gap-1">
-                                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                  </svg>
-                                  {patient.email}
-                                </span>
-                              )}
-                              {patient.phone && (
-                                <span className="flex items-center gap-1">
-                                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                                  </svg>
-                                  {patient.phone}
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <div className="text-[9px] uppercase tracking-wide font-semibold text-[#888780] mb-1">
-                              Evaluaciones
-                            </div>
-                            <div className="text-[16px] font-bold text-[#185FA5]">
-                              {patient._count.assessments}
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Última evaluación info */}
-                        {lastAssessment && (
-                          <div className="flex items-center gap-4 mb-3 pb-3 border-b border-[rgba(0,0,0,0.08)]">
-                            <div>
-                              <div className="text-[9px] uppercase tracking-wide font-semibold text-[#888780] mb-0.5">
-                                Último test
-                              </div>
-                              <div className="text-[11px] font-bold font-mono text-[#1A1917]">
-                                {lastAssessment.instrumentType}
-                              </div>
-                            </div>
-                            <div>
-                              <div className="text-[9px] uppercase tracking-wide font-semibold text-[#888780] mb-0.5">
-                                Fecha
-                              </div>
-                              <div className="text-[11px] text-[#1A1917]">
-                                {lastAssessment.completedAt
-                                  ? new Date(lastAssessment.completedAt).toLocaleDateString('es-ES', {
-                                      day: 'numeric',
-                                      month: 'short',
-                                      year: 'numeric'
-                                    })
-                                  : 'Pendiente'}
-                              </div>
-                            </div>
-                            {lastAssessment.score !== null && (
-                              <div>
-                                <div className="text-[9px] uppercase tracking-wide font-semibold text-[#888780] mb-0.5">
-                                  Puntuación
-                                </div>
-                                <div className="text-[11px] font-bold text-[#1A1917]">
-                                  {lastAssessment.score}/27
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        )}
-
-                        {/* CTA Principal */}
-                        <div className="flex gap-2">
-                          <button
-                            onClick={primaryAction.onClick}
-                            className={`flex-1 px-4 py-2.5 text-[11px] font-semibold rounded-lg transition-colors ${
-                              hasAlert
-                                ? 'bg-[#E24B4A] text-white hover:bg-[#C23D3C]'
-                                : 'bg-[#185FA5] text-white hover:bg-[#0C447C]'
-                            }`}
-                          >
-                            {primaryAction.label}
-                          </button>
-                          {!hasPending && !hasAlert && lastAssessment && (
-                            <button
-                              onClick={() => handleSendAssessment(patient)}
-                              className="px-4 py-2.5 text-[11px] font-semibold border border-[rgba(0,0,0,0.13)] rounded-lg hover:bg-[#F7F6F3] transition-colors"
-                            >
-                              + Nuevo test
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    </div>
+                    </button>
+                    {patient.email && (
+                      <div className="text-[9px] text-[#888780] mt-0.5">{patient.email}</div>
+                    )}
+                  </div>
+                  
+                  <span className="text-[11px] font-bold font-mono">
+                    {lastAssessment?.instrumentType || '—'}
+                  </span>
+                  
+                  <span className="text-[11px] text-[#888780]">
+                    {lastAssessment?.completedAt
+                      ? new Date(lastAssessment.completedAt).toLocaleDateString('es-ES', {
+                          day: 'numeric',
+                          month: 'short',
+                        })
+                      : '—'}
+                  </span>
+                  
+                  <span>
+                    {lastAssessment?.status === 'COMPLETED' ? (
+                      <span
+                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-semibold ${
+                          hasAlert
+                            ? 'bg-[#FCEBEB] text-[#A32D2D]'
+                            : lastAssessment.severity === 'Severa' || lastAssessment.severity === 'Moderadamente severa'
+                            ? 'bg-[#FCEBEB] text-[#A32D2D]'
+                            : lastAssessment.severity === 'Moderada'
+                            ? 'bg-[#FAEEDA] text-[#854F0B]'
+                            : 'bg-[#E1F5EE] text-[#0F6E56]'
+                        }`}
+                      >
+                        {hasAlert ? '⚠ Urgente' : lastAssessment.severity || 'Completado'}
+                      </span>
+                    ) : lastAssessment?.status === 'PENDING' ? (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-semibold bg-[#F1EFE8] text-[#888780]">
+                        Pendiente
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-semibold bg-[#E1F5EE] text-[#0F6E56]">
+                        Sin evaluación
+                      </span>
+                    )}
+                  </span>
+                  
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => router.push(`/dashboard/patients/${patient.id}`)}
+                      className="px-3 py-1 text-[10px] font-medium bg-[#185FA5] text-white rounded-md hover:bg-[#0C447C] transition-colors"
+                      title="Ver historial completo"
+                    >
+                      {patient.assessments.length > 1 ? `Historial (${patient.assessments.length})` : 'Ver perfil'}
+                    </button>
+                    <button
+                      onClick={() => handleSendAssessment(patient)}
+                      className="px-3 py-1 text-[10px] font-medium border border-[rgba(0,0,0,0.13)] rounded-md hover:bg-[#F1EFE8] transition-colors"
+                    >
+                      Enviar test
+                    </button>
                   </div>
                 </div>
               );
