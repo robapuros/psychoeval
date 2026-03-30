@@ -15,6 +15,11 @@ const createPrismaClient = () => {
     return null as any; // Type workaround for build
   }
   
+  // NOTE: If you see "prepared statement already exists" errors in production:
+  // This is a known issue with Prisma + Vercel + direct PostgreSQL connections.
+  // Solution: Use a pooled connection (pgbouncer).
+  // See VERCEL-FIX-REQUIRED.md for detailed instructions.
+  
   return new PrismaClient({
     log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
   });
