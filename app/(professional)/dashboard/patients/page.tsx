@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import DashboardHeader from '@/components/dashboard/DashboardHeader';
 
 interface Patient {
   id: string;
@@ -75,20 +76,20 @@ export default function PatientsPage() {
 
   return (
     <div className="min-h-screen bg-[#F7F6F3]">
-      {/* Topbar */}
-      <div className="bg-white border-b border-[rgba(0,0,0,0.08)] px-4 h-[42px] flex items-center justify-between">
-        <span className="text-[12px] font-bold tracking-tight">Pacientes</span>
-        <div className="flex items-center gap-2">
-          <span className="px-3 py-1.5 text-[10px] border border-[rgba(0,0,0,0.13)] rounded-md bg-transparent font-mono">
-            {new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })}
-          </span>
-          <button
-            onClick={() => setShowCreateModal(true)}
-            className="px-3 py-1.5 text-[10px] font-medium bg-[#185FA5] text-white rounded-md hover:bg-[#0C447C] transition-colors"
-          >
-            + Nuevo paciente
-          </button>
-        </div>
+      {/* Header */}
+      <DashboardHeader title="Pacientes" userEmail={session?.user?.email} />
+
+      {/* Actions Bar */}
+      <div className="bg-white border-b border-[rgba(0,0,0,0.08)] px-4 py-2.5 flex items-center justify-end gap-2">
+        <span className="px-3 py-1.5 text-[10px] border border-[rgba(0,0,0,0.13)] rounded-md bg-transparent font-mono">
+          {new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })}
+        </span>
+        <button
+          onClick={() => setShowCreateModal(true)}
+          className="px-3 py-1.5 text-[10px] font-medium bg-[#185FA5] text-white rounded-md hover:bg-[#0C447C] transition-colors"
+        >
+          + Nuevo paciente
+        </button>
       </div>
 
       {/* Content */}
