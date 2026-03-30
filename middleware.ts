@@ -1,6 +1,7 @@
 import { withAuth } from 'next-auth/middleware';
 import { NextResponse } from 'next/server';
 
+// Route protection middleware
 export default withAuth(
   function middleware(req) {
     const token = req.nextauth.token;
