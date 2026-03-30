@@ -94,7 +94,7 @@ export async function POST(request: NextRequest) {
         patientId,
         professionalId: session.user.id,
         expiresAt,
-        status: 'pending',
+        status: 'PENDING',
       },
       include: {
         patient: {

@@ -155,7 +155,7 @@ export default function PatientsPage() {
                   </span>
                   
                   <span>
-                    {lastAssessment?.status === 'completed' ? (
+                    {lastAssessment?.status === 'COMPLETED' ? (
                       <span
                         className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-semibold ${
                           hasAlert
@@ -169,7 +169,7 @@ export default function PatientsPage() {
                       >
                         {hasAlert ? '⚠ Urgente' : lastAssessment.severity || 'Completado'}
                       </span>
-                    ) : lastAssessment?.status === 'pending' ? (
+                    ) : lastAssessment?.status === 'PENDING' ? (
                       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-semibold bg-[#F1EFE8] text-[#888780]">
                         Pendiente
                       </span>
@@ -181,7 +181,7 @@ export default function PatientsPage() {
                   </span>
                   
                   <div className="flex gap-2">
-                    {lastAssessment?.status === 'completed' ? (
+                    {lastAssessment?.status === 'COMPLETED' ? (
                       <>
                         <button
                           onClick={() => router.push(`/dashboard/patients/${patient.id}/assessments/${lastAssessment.token}`)}

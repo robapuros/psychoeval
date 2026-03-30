@@ -46,7 +46,7 @@ export async function GET(
     }
 
     // Verificar si ya fue completada
-    if (assessment.status === 'completed') {
+    if (assessment.status === 'COMPLETED') {
       return NextResponse.json(
         { error: 'Esta evaluación ya ha sido completada' },
         { status: 410 }

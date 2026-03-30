@@ -56,7 +56,7 @@ export async function POST(
     }
 
     // Verificar estado
-    if (assessment.status === 'completed') {
+    if (assessment.status === 'COMPLETED') {
       return NextResponse.json(
         { error: 'Esta evaluación ya ha sido completada' },
         { status: 400 }
@@ -121,13 +121,11 @@ export async function POST(
     const updatedAssessment = await prisma.assessment.update({
       where: { id: assessment.id },
       data: {
-        status: 'completed',
+        status: 'COMPLETED',
         completedAt: new Date(),
-        responses: responses,
         score: scoringResult.totalScore,
         severity: scoringResult.severity,
         hasCriticalAlert,
-        criticalItems: criticalItems.length > 0 ? criticalItems : undefined,
       },
     });
 
