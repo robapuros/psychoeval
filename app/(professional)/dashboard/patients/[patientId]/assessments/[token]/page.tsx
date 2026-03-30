@@ -40,6 +40,7 @@ interface Instrument {
   description: string;
   scoring: any;
   questions: any[];
+  responseOptions?: Array<{ value: number; label: string }>;
 }
 
 export default function AssessmentDetailsPage() {
@@ -398,37 +399,88 @@ export default function AssessmentDetailsPage() {
 
           {showResponses && (
             <div className="border-t border-[rgba(0,0,0,0.1)] divide-y divide-[rgba(0,0,0,0.08)]">
-              {assessment.responses.map((response) => (
-                <div
-                  key={response.questionNumber}
-                  className={`px-6 py-4 ${
-                    response.critical && response.value > 0 ? 'bg-[#FFF9F9]' : ''
-                  }`}
-                >
-                  <div className="flex items-start gap-3">
-                    <span className="flex-shrink-0 w-7 h-7 rounded-full bg-[#185FA5] text-white text-[11px] font-bold flex items-center justify-center">
-                      {response.questionNumber}
-                    </span>
-                    <div className="flex-1">
-                      <p className="text-[11px] font-medium text-[#1A1917] mb-2">
-                        {response.questionText}
-                        {response.critical && (
-                          <span className="ml-2 text-[#E24B4A]">⚠️</span>
-                        )}
-                      </p>
-                      <span
-                        className={`inline-flex items-center px-3 py-1 rounded text-[10px] font-semibold ${
-                          response.critical && response.value > 0
-                            ? 'bg-[#FCEBEB] text-[#A32D2D]'
-                            : 'bg-[#F1EFE8] text-[#5F5E5A]'
-                        }`}
-                      >
-                        {response.valueLabel} ({response.value} puntos)
+              {assessment.responses.map((response) => {
+                // Obtener opciones de respuesta (pueden ser específicas de la pregunta o globales)
+                const question = instrument.questions.find(q => q.number === response.questionNumber);
+                const responseOptions = (question as any)?.responseOptions || instrument.responseOptions || [];
+                
+                return (
+                  <div
+                    key={response.questionNumber}
+                    className={`px-6 py-4 ${
+                      response.critical && response.value > 0 ? 'bg-[#FFF9F9]' : ''
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <span className="flex-shrink-0 w-7 h-7 rounded-full bg-[#185FA5] text-white text-[11px] font-bold flex items-center justify-center">
+                        {response.questionNumber}
                       </span>
+                      <div className="flex-1">
+                        <p className="text-[11px] font-medium text-[#1A1917] mb-3">
+                          {response.questionText}
+                          {response.critical && (
+                            <span className="ml-2 text-[#E24B4A]">⚠️</span>
+                          )}
+                        </p>
+                        
+                        {/* Mostrar todas las opciones con la seleccionada destacada */}
+                        <div className="space-y-2">
+                          {responseOptions.map((option: any) => {
+                            const isSelected = option.value === response.value;
+                            
+                            return (
+                              <div
+                                key={option.value}
+                                className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-all ${
+                                  isSelected
+                                    ? response.critical && response.value > 0
+                                      ? 'border-[#E24B4A] bg-[#FCEBEB]'
+                                      : 'border-[#185FA5] bg-[#EFF5FB]'
+                                    : 'border-[rgba(0,0,0,0.08)] bg-white'
+                                }`}
+                              >
+                                <div className={`flex-shrink-0 w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                                  isSelected
+                                    ? response.critical && response.value > 0
+                                      ? 'border-[#E24B4A] bg-[#E24B4A]'
+                                      : 'border-[#185FA5] bg-[#185FA5]'
+                                    : 'border-[rgba(0,0,0,0.2)] bg-white'
+                                }`}>
+                                  {isSelected && (
+                                    <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 16 16">
+                                      <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+                                    </svg>
+                                  )}
+                                </div>
+                                <div className="flex-1">
+                                  <span className={`text-[10px] font-medium ${
+                                    isSelected
+                                      ? response.critical && response.value > 0
+                                        ? 'text-[#A32D2D]'
+                                        : 'text-[#185FA5]'
+                                      : 'text-[#888780]'
+                                  }`}>
+                                    {option.label}
+                                  </span>
+                                </div>
+                                <span className={`text-[9px] font-mono px-2 py-0.5 rounded ${
+                                  isSelected
+                                    ? response.critical && response.value > 0
+                                      ? 'bg-[#A32D2D] text-white'
+                                      : 'bg-[#185FA5] text-white'
+                                    : 'bg-[#F1EFE8] text-[#888780]'
+                                }`}>
+                                  {option.value}
+                                </span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
