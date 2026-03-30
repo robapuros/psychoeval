@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface DashboardHeaderProps {
   title: string;
@@ -17,8 +18,19 @@ export default function DashboardHeader({ title, userEmail }: DashboardHeaderPro
   };
 
   return (
-    <div className="bg-white border-b border-[rgba(0,0,0,0.08)] px-4 h-[42px] flex items-center justify-between">
-      <span className="text-[12px] font-bold tracking-tight">{title}</span>
+    <div className="bg-white border-b border-[rgba(0,0,0,0.08)] px-4 h-[50px] flex items-center justify-between">
+      <div className="flex items-center gap-3">
+        <Image
+          src="/logo.png"
+          alt="PsicoEvalúa"
+          width={120}
+          height={30}
+          className="h-[28px] w-auto"
+          priority
+        />
+        <span className="text-[11px] text-[#888780]">|</span>
+        <span className="text-[11px] font-medium text-[#888780]">{title}</span>
+      </div>
 
       {/* Menu Hamburguesa */}
       <div className="relative">

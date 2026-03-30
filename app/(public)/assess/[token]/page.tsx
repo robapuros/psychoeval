@@ -48,6 +48,7 @@ export default function AssessmentPage() {
   const [assessment, setAssessment] = useState<Assessment | null>(null);
   const [instrument, setInstrument] = useState<Instrument | null>(null);
   
+  const [showInstructions, setShowInstructions] = useState(true);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [responses, setResponses] = useState<Record<number, number>>({});
   const [submitting, setSubmitting] = useState(false);
@@ -159,6 +160,98 @@ export default function AssessmentPage() {
           <p className="text-[11px] text-[#888780] leading-relaxed">
             Si crees que esto es un error, contacta con tu profesional.
           </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Pantalla de instrucciones preliminares
+  if (showInstructions) {
+    return (
+      <div className="min-h-screen bg-[#F7F6F3] flex flex-col items-center justify-center p-4">
+        <div className="w-full max-w-2xl">
+          <div className="bg-white rounded-xl border border-[rgba(0,0,0,0.08)] shadow-lg p-8">
+            {/* Logo/Header */}
+            <div className="text-center mb-6">
+              <div className="w-16 h-16 bg-[#185FA5] rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                </svg>
+              </div>
+              <h1 className="text-[24px] font-bold text-[#1A1917] mb-2">
+                {instrument.name}
+              </h1>
+              <p className="text-[12px] text-[#888780]">
+                Evaluación enviada por {assessment.professional.name}
+              </p>
+            </div>
+
+            {/* Instrucciones */}
+            <div className="space-y-4 mb-6">
+              <div className="bg-[#EFF5FB] border border-[#185FA5] rounded-lg p-4">
+                <h2 className="text-[14px] font-bold text-[#185FA5] mb-2 flex items-center gap-2">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Antes de comenzar
+                </h2>
+                <ul className="space-y-2 text-[11px] text-[#1A1917]">
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#185FA5] font-bold">•</span>
+                    <span>Busca un <strong>lugar tranquilo y cómodo</strong> donde puedas concentrarte sin distracciones.</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#185FA5] font-bold">•</span>
+                    <span>Tómate tu <strong>tiempo para reflexionar</strong> sobre cada pregunta antes de responder.</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#185FA5] font-bold">•</span>
+                    <span>No hay respuestas correctas o incorrectas, responde con <strong>honestidad</strong>.</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#185FA5] font-bold">•</span>
+                    <span>El cuestionario tomará aproximadamente <strong>{instrument.timeEstimate}</strong>.</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="bg-[#F1EFE8] rounded-lg p-4">
+                <p className="text-[11px] text-[#888780] leading-relaxed">
+                  <strong className="text-[#1A1917]">Instrucciones:</strong> {instrument.instructions}
+                </p>
+              </div>
+
+              <div className="flex items-center gap-3 text-[10px] text-[#888780]">
+                <div className="flex items-center gap-1">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  {instrument.timeEstimate}
+                </div>
+                <div className="flex items-center gap-1">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  {instrument.questions.length} preguntas
+                </div>
+              </div>
+            </div>
+
+            {/* Botón para comenzar */}
+            <button
+              onClick={() => setShowInstructions(false)}
+              className="w-full px-6 py-4 bg-[#185FA5] text-white text-[14px] font-bold rounded-lg hover:bg-[#0C447C] transition-colors flex items-center justify-center gap-2"
+            >
+              Comenzar evaluación
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </button>
+
+            <p className="text-[9px] text-center text-[#888780] mt-4">
+              Tus respuestas son confidenciales y solo serán compartidas con tu profesional.
+            </p>
+          </div>
         </div>
       </div>
     );

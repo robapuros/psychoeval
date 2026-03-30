@@ -218,19 +218,50 @@ export default function AssessmentDetailsPage() {
 
           {/* Alerta Crítica */}
           {assessment.hasCriticalAlert && criticalResponse && (
-            <div className="mt-4 p-4 bg-[#FCEBEB] border-l-4 border-[#E24B4A] rounded">
+            <div className="mt-4 p-5 bg-[#FCEBEB] border-l-4 border-[#E24B4A] rounded-lg">
               <div className="flex items-start gap-3">
-                <span className="text-[20px]">⚠️</span>
-                <div>
-                  <p className="text-[12px] font-bold text-[#A32D2D] mb-1">
-                    ALERTA CRÍTICA - Ítem {criticalResponse.questionNumber}
+                <div className="w-10 h-10 bg-[#E24B4A] rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <p className="text-[13px] font-bold text-[#A32D2D] mb-2 flex items-center gap-2">
+                    🚨 ALERTA CRÍTICA: Ideación suicida detectada
                   </p>
-                  <p className="text-[11px] text-[#A32D2D] mb-2">
-                    {criticalResponse.questionText}
-                  </p>
-                  <p className="text-[10px] font-semibold text-[#A32D2D]">
-                    Respuesta: {criticalResponse.valueLabel}
-                  </p>
+                  <div className="bg-white bg-opacity-70 rounded p-3 mb-3">
+                    <p className="text-[10px] uppercase tracking-wide font-semibold text-[#888780] mb-1">
+                      ÍTEM {criticalResponse.questionNumber}
+                    </p>
+                    <p className="text-[11px] text-[#1A1917] mb-2">
+                      "{criticalResponse.questionText}"
+                    </p>
+                    <p className="text-[10px] font-semibold text-[#A32D2D]">
+                      Respuesta del paciente: {criticalResponse.valueLabel}
+                    </p>
+                  </div>
+                  <div className="bg-[#A32D2D] bg-opacity-10 rounded p-3 border border-[#A32D2D] border-opacity-30">
+                    <p className="text-[11px] font-bold text-[#A32D2D] mb-1">
+                      ⚡ Acción requerida
+                    </p>
+                    <p className="text-[10px] text-[#A32D2D] leading-relaxed">
+                      Se requiere <strong>evaluación inmediata del riesgo suicida</strong>. Considere:
+                    </p>
+                    <ul className="mt-2 space-y-1 text-[10px] text-[#A32D2D]">
+                      <li className="flex items-start gap-1">
+                        <span>•</span>
+                        <span>Contacto telefónico en las próximas 24 horas</span>
+                      </li>
+                      <li className="flex items-start gap-1">
+                        <span>•</span>
+                        <span>Evaluación presencial urgente si es posible</span>
+                      </li>
+                      <li className="flex items-start gap-1">
+                        <span>•</span>
+                        <span>Derivación a emergencias si hay riesgo inminente</span>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>

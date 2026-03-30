@@ -6,8 +6,11 @@ import { AuthProvider } from '@/lib/auth/session-provider';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'PsicoEval - Mental Health Assessment Platform',
-  description: 'Streamlined questionnaire platform for psychology professionals',
+  title: 'PsicoEvalúa - Plataforma de Evaluación Psicológica',
+  description: 'Plataforma de cuestionarios clínicos para profesionales de la psicología',
+  icons: {
+    icon: '/favicon.jpg',
+  },
 };
 
 export default function RootLayout({
@@ -16,7 +19,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="es">
+      <head>
+        <link rel="icon" href="/favicon.jpg" type="image/jpeg" />
+      </head>
       <body className={inter.className}>
         <AuthProvider>{children}</AuthProvider>
       </body>
