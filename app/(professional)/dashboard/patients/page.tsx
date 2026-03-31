@@ -26,6 +26,9 @@ interface Patient {
   };
 }
 
+type SortField = 'date' | 'severity';
+type SortDirection = 'asc' | 'desc';
+
 export default function PatientsPage() {
   const { data: session } = useSession();
   const router = useRouter();
@@ -35,6 +38,10 @@ export default function PatientsPage() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showSendModal, setShowSendModal] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+  
+  // Sorting state
+  const [sortField, setSortField] = useState<SortField>('date');
+  const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
 
   // Redirect admins
   if (session?.user?.role === 'ADMIN') {
@@ -66,6 +73,66 @@ export default function PatientsPage() {
     setShowSendModal(true);
   }
 
+  // Helper: Get severity order for sorting
+  function getSeverityOrder(patient: Patient): number {
+    const lastAssessment = patient.assessments[0];
+    
+    if (!lastAssessment) return 100; // Sin evaluación (último)
+    
+    if (lastAssessment.hasCriticalAlert) return 0; // Urgente (primero)
+    
+    if (lastAssessment.status === 'PENDING') return 90; // Pendiente
+    
+    if (lastAssessment.severity) {
+      const severity = lastAssessment.severity.toLowerCase();
+      if (severity.includes('severa') || severity.includes('severe')) return 1; // Severa/Moderadamente severa
+      if (severity.includes('moderada') || severity.includes('moderate')) return 2; // Moderada
+      if (severity.includes('leve') || severity.includes('lev') || severity.includes('mild') || severity.includes('mínima')) return 3; // Leve/Mínima
+    }
+    
+    return 80; // Otros casos completados
+  }
+
+  // Sort patients
+  function getSortedPatients(): Patient[] {
+    const sorted = [...patients].sort((a, b) => {
+      if (sortField === 'date') {
+        const dateA = a.assessments[0]?.completedAt || '';
+        const dateB = b.assessments[0]?.completedAt || '';
+        
+        if (!dateA && !dateB) return 0;
+        if (!dateA) return 1;
+        if (!dateB) return -1;
+        
+        const comparison = new Date(dateB).getTime() - new Date(dateA).getTime();
+        return sortDirection === 'asc' ? -comparison : comparison;
+      } else {
+        // Sort by severity
+        const severityA = getSeverityOrder(a);
+        const severityB = getSeverityOrder(b);
+        
+        const comparison = severityA - severityB;
+        return sortDirection === 'asc' ? comparison : -comparison;
+      }
+    });
+    
+    return sorted;
+  }
+
+  // Toggle sort
+  function handleSort(field: SortField) {
+    if (sortField === field) {
+      // Toggle direction
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      // Change field, default to desc for severity, desc for date
+      setSortField(field);
+      setSortDirection('desc');
+    }
+  }
+
+  const sortedPatients = getSortedPatients();
+
   if (loading) {
     return (
       <div className="min-h-screen bg-[#F7F6F3] flex items-center justify-center">
@@ -94,11 +161,48 @@ export default function PatientsPage() {
 
       {/* Content */}
       <div className="p-3 sm:p-4">
-        <div className="mb-3">
-          <div className="text-[16px] font-bold tracking-tight mb-0.5">
-            Mis Pacientes ({patients.length})
+        <div className="mb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <div className="text-[16px] font-bold tracking-tight mb-0.5">
+              Mis Pacientes ({patients.length})
+            </div>
+            <div className="text-[10px] text-[#888780]">Gestión de casos clínicos</div>
           </div>
-          <div className="text-[10px] text-[#888780]">Gestión de casos clínicos</div>
+          
+          {/* Sort Controls */}
+          {patients.length > 0 && (
+            <div className="flex items-center gap-2">
+              <span className="text-[9px] text-[#888780] uppercase tracking-wide font-semibold">
+                Ordenar:
+              </span>
+              <button
+                onClick={() => handleSort('date')}
+                className={`px-2.5 py-1 text-[10px] font-medium rounded-md border transition-all flex items-center gap-1 ${
+                  sortField === 'date'
+                    ? 'bg-[#185FA5] text-white border-[#185FA5]'
+                    : 'bg-white text-[#888780] border-[rgba(0,0,0,0.13)] hover:border-[#185FA5]'
+                }`}
+              >
+                Fecha
+                {sortField === 'date' && (
+                  <span className="text-[8px]">{sortDirection === 'desc' ? '↓' : '↑'}</span>
+                )}
+              </button>
+              <button
+                onClick={() => handleSort('severity')}
+                className={`px-2.5 py-1 text-[10px] font-medium rounded-md border transition-all flex items-center gap-1 ${
+                  sortField === 'severity'
+                    ? 'bg-[#185FA5] text-white border-[#185FA5]'
+                    : 'bg-white text-[#888780] border-[rgba(0,0,0,0.13)] hover:border-[#185FA5]'
+                }`}
+              >
+                Estado
+                {sortField === 'severity' && (
+                  <span className="text-[8px]">{sortDirection === 'desc' ? '↓' : '↑'}</span>
+                )}
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Table / Cards */}
@@ -128,7 +232,7 @@ export default function PatientsPage() {
               </div>
 
               {/* Rows */}
-              {patients.map((patient) => {
+              {sortedPatients.map((patient) => {
               const lastAssessment = patient.assessments[0];
               const hasAlert = lastAssessment?.hasCriticalAlert;
               
@@ -212,7 +316,7 @@ export default function PatientsPage() {
 
             {/* Mobile: Cards */}
             <div className="md:hidden space-y-3">
-              {patients.map((patient) => {
+              {sortedPatients.map((patient) => {
                 const lastAssessment = patient.assessments[0];
                 const hasAlert = lastAssessment?.hasCriticalAlert;
                 
