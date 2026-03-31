@@ -39,7 +39,7 @@ Email: admin@psicoevalua.com
 Contraseña: Admin1234!
 ```
 
-**Acceso:** https://psychoeval.vercel.app/login  
+**Acceso:** https://psicosnap.vercel.app/login  
 **Redirige a:** `/admin/professionals`
 
 ### Cuenta de Profesional (Prueba)
@@ -48,7 +48,7 @@ Email: psicologo@psicoevalua.com
 Contraseña: Test1234!
 ```
 
-**Acceso:** https://psychoeval.vercel.app/login  
+**Acceso:** https://psicosnap.vercel.app/login  
 **Redirige a:** `/dashboard/patients`
 
 ---
@@ -239,7 +239,7 @@ Si tu rol es incorrecto, contacta al administrador.
 
 **GitHub:** https://github.com/robapuros/psychoeval  
 **Documentación:** Ver `/docs` folder  
-**Deploy:** https://psychoeval.vercel.app
+**Deploy:** https://psicosnap.vercel.app
 
 ---
 

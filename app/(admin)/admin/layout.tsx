@@ -39,7 +39,7 @@ export default function AdminLayout({
       {/* Header with logout */}
       <header className="bg-white border-b border-[rgba(0,0,0,0.08)] px-4 h-[50px] flex items-center justify-between sticky top-0 z-10">
         <div className="flex items-center gap-4">
-          <h1 className="text-[14px] font-bold tracking-tight">PsicoEvalúa Admin</h1>
+          <h1 className="text-[14px] font-bold tracking-tight">PsicoSnap Admin</h1>
           <nav className="flex gap-2">
             <button
               onClick={() => router.push('/admin/professionals')}

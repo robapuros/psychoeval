@@ -85,13 +85,13 @@ After applying the fix, test:
 
 ### 1. Dashboard Loads
 ```
-https://psychoeval.vercel.app/dashboard/patients
+https://psicosnap.vercel.app/dashboard/patients
 ```
 Should load without errors.
 
 ### 2. Diagnostic Endpoint
 ```
-GET https://psychoeval.vercel.app/api/patients/diagnose
+GET https://psicosnap.vercel.app/api/patients/diagnose
 ```
 Should return:
 ```json

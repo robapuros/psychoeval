@@ -232,7 +232,7 @@ npm run dev
 
 Required:
 - `DATABASE_URL` - PostgreSQL connection string
-- `NEXTAUTH_URL` - https://psychoeval.vercel.app
+- `NEXTAUTH_URL` - https://psicosnap.vercel.app
 - `NEXTAUTH_SECRET` - Secret key for NextAuth
 - `RESEND_API_KEY` - Email API key (optional)
 - `RESEND_FROM_EMAIL` - Email sender (optional)

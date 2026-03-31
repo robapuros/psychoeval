@@ -361,7 +361,7 @@ export default function AssessmentPage() {
             Instrumentos y Licencias
           </a>
           {' • '}
-          PsicoEvalúa © 2026
+          PsicoSnap © 2026
         </p>
       </div>
     </div>

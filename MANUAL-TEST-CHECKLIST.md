@@ -1,7 +1,7 @@
 # Manual Testing Checklist
 
 **App:** PsicoEvalúa  
-**URL:** https://psychoeval.vercel.app  
+**URL:** https://psicosnap.vercel.app  
 **Date:** 2026-03-30
 
 ---

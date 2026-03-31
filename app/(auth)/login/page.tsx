@@ -45,7 +45,7 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         <div className="bg-white rounded-xl border border-[rgba(0,0,0,0.08)] shadow-sm p-8">
           <div className="text-center mb-8">
-            <h1 className="text-[24px] font-bold tracking-tight text-[#1A1917]">PsicoEvalúa</h1>
+            <h1 className="text-[24px] font-bold tracking-tight text-[#1A1917]">PsicoSnap</h1>
             <p className="text-[11px] text-[#888780] mt-1 uppercase tracking-wide font-semibold">Acceso Profesionales</p>
           </div>
 

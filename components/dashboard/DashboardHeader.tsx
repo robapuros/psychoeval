@@ -21,8 +21,8 @@ export default function DashboardHeader({ title, userEmail }: DashboardHeaderPro
     <div className="bg-white border-b border-[rgba(0,0,0,0.08)] px-3 sm:px-4 h-[50px] flex items-center justify-between">
       <div className="flex items-center gap-2 sm:gap-3 min-w-0">
         <Image
-          src="/logo.png"
-          alt="PsicoEvalúa"
+          src="/logo-horizontal.jpg"
+          alt="PsicoSnap"
           width={120}
           height={30}
           className="h-[24px] sm:h-[28px] w-auto flex-shrink-0"

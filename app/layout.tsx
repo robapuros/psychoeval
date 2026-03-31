@@ -6,7 +6,7 @@ import { AuthProvider } from '@/lib/auth/session-provider';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'PsicoEvalúa - Plataforma de Evaluación Psicológica',
+  title: 'PsicoSnap - Plataforma de Evaluación Psicológica',
   description: 'Plataforma de cuestionarios clínicos para profesionales de la psicología',
   icons: {
     icon: '/favicon.jpg',

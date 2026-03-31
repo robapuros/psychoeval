@@ -1,8 +1,8 @@
-# PsicoEval
+# PsicoSnap
 
 **Mental health assessment questionnaire platform for psychology professionals**
 
-PsicoEval is a streamlined tool that helps mental health professionals send standardized psychological assessments to patients via secure links, with automatic scoring and result tracking.
+PsicoSnap is a streamlined tool that helps mental health professionals send standardized psychological assessments to patients via secure links, with automatic scoring and result tracking.
 
 ## 🎯 MVP Scope
 
@@ -58,8 +58,8 @@ PsicoEval is a streamlined tool that helps mental health professionals send stan
 
 ```bash
 # Clone repository
-git clone https://github.com/robapuros/psychoeval.git
-cd psychoeval
+git clone https://github.com/robapuros/psicosnap.git
+cd psicosnap
 
 # Install dependencies
 npm install
@@ -80,7 +80,7 @@ Visit `http://localhost:3000`
 ## 📁 Project Structure
 
 ```
-psychoeval/
+psicosnap/
 ├── app/                    # Next.js App Router
 │   ├── (auth)/            # Authentication routes
 │   ├── (professional)/    # Professional dashboard

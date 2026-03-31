@@ -7,7 +7,7 @@ export default function LicenciasPage() {
       <div className="bg-white border-b border-[rgba(0,0,0,0.08)]">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link href="/" className="text-[14px] font-bold tracking-tight text-[#185FA5]">
-            PsicoEvalúa
+            PsicoSnap
           </Link>
           <Link
             href="/login"
@@ -25,7 +25,7 @@ export default function LicenciasPage() {
             Instrumentos y Licencias
           </h1>
           <p className="text-[12px] text-[#888780] leading-relaxed mb-6">
-            PsicoEvalúa utiliza únicamente instrumentos psicométricos validados y de dominio público
+            PsicoSnap utiliza únicamente instrumentos psicométricos validados y de dominio público
             o con licencia de uso clínico permitida. A continuación, se detallan las fuentes,
             autores y licencias de cada cuestionario implementado en la plataforma.
           </p>
@@ -357,7 +357,7 @@ export default function LicenciasPage() {
           </h2>
           <div className="space-y-2 text-[11px] text-[#A32D2D] leading-relaxed">
             <p>
-              <strong>Uso exclusivo para profesionales de la salud mental:</strong> PsicoEvalúa está
+              <strong>Uso exclusivo para profesionales de la salud mental:</strong> PsicoSnap está
               diseñado para ser utilizado únicamente por psicólogos colegiados, psiquiatras y otros
               profesionales de la salud mental debidamente acreditados.
             </p>
@@ -372,7 +372,7 @@ export default function LicenciasPage() {
               clínico, así como de interpretar correctamente los resultados.
             </p>
             <p>
-              <strong>Confidencialidad y protección de datos:</strong> PsicoEvalúa cumple con el
+              <strong>Confidencialidad y protección de datos:</strong> PsicoSnap cumple con el
               RGPD (UE 2016/679) y la LOPDGDD. Los datos de pacientes son tratados con los máximos
               estándares de seguridad y confidencialidad.
             </p>
@@ -388,7 +388,7 @@ export default function LicenciasPage() {
         {/* Footer */}
         <div className="text-center py-4">
           <p className="text-[10px] text-[#888780]">
-            © 2026 PsicoEvalúa • Plataforma de evaluación psicológica digital
+            © 2026 PsicoSnap • Plataforma de evaluación psicológica digital
           </p>
           <p className="text-[10px] text-[#888780] mt-1">
             Para consultas sobre licencias:{' '}
