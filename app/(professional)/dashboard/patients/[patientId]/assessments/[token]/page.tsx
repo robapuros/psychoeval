@@ -28,6 +28,8 @@ interface Assessment {
   patient: {
     id: string;
     fullName: string;
+    email: string | null;
+    phone: string | null;
   };
   responses: Response[];
 }
@@ -188,13 +190,55 @@ export default function AssessmentDetailsPage() {
 
         {/* Puntuación Total Card */}
         <div className="bg-white rounded-lg border border-[rgba(0,0,0,0.1)] p-4 sm:p-8">
-          <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-3 mb-2">
-            <h1 className="text-[36px] sm:text-[48px] font-bold tracking-tight leading-none">
-              {assessment.score}/<span className="text-[24px] sm:text-[32px] text-[#888780]">{instrument.scoring.range.max}</span>
-            </h1>
-            <div className="flex flex-col">
+          {/* Header: Paciente + Resultado */}
+          <div className="flex flex-col md:flex-row justify-between gap-6 mb-6">
+            {/* Izquierda: Información del Paciente */}
+            <div className="flex-1">
+              <h2 className="text-[18px] sm:text-[22px] font-bold text-[#1A1917] mb-3">
+                {assessment.patient.fullName}
+              </h2>
+              
+              {/* Email y Teléfono */}
+              <div className="space-y-2 mb-4">
+                {assessment.patient.email && (
+                  <div className="flex items-center gap-2 text-[11px] text-[#888780]">
+                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    <span>{assessment.patient.email}</span>
+                  </div>
+                )}
+                {assessment.patient.phone && (
+                  <div className="flex items-center gap-2 text-[11px] text-[#888780]">
+                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    </svg>
+                    <span>{assessment.patient.phone}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Tipo de Test */}
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#EFF5FB] border border-[#185FA5] rounded-lg">
+                <svg className="w-4 h-4 text-[#185FA5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <span className="text-[11px] font-semibold text-[#185FA5]">
+                  {instrument.shortName} - {instrument.name}
+                </span>
+              </div>
+            </div>
+
+            {/* Derecha: Resultado */}
+            <div className="flex flex-col items-end justify-start text-right border-l-0 md:border-l-2 border-[rgba(0,0,0,0.08)] md:pl-6">
+              <div className="text-[9px] uppercase tracking-wide font-semibold text-[#888780] mb-2">
+                Puntuación
+              </div>
+              <h1 className="text-[36px] sm:text-[48px] font-bold tracking-tight leading-none mb-2">
+                {assessment.score}/<span className="text-[24px] sm:text-[32px] text-[#888780]">{instrument.scoring.range.max}</span>
+              </h1>
               <span 
-                className="text-[16px] sm:text-[20px] font-bold mb-0.5 sm:mb-1"
+                className="text-[16px] sm:text-[20px] font-bold mb-2"
                 style={{ color: severityInfo?.color || '#1A1917' }}
               >
                 {severityInfo?.severity || assessment.severity}
@@ -205,17 +249,20 @@ export default function AssessmentDetailsPage() {
             </div>
           </div>
           
-          <p className="text-[10px] sm:text-[11px] text-[#888780] mb-3 sm:mb-4">
-            Completado el {assessment.completedAt
-              ? new Date(assessment.completedAt).toLocaleDateString('es-ES', {
-                  day: 'numeric',
-                  month: 'long',
-                  year: 'numeric',
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })
-              : '—'}
-          </p>
+          {/* Fecha Completado (Centrada) */}
+          <div className="text-center pt-4 border-t border-[rgba(0,0,0,0.08)]">
+            <p className="text-[10px] sm:text-[11px] text-[#888780]">
+              Completado el {assessment.completedAt
+                ? new Date(assessment.completedAt).toLocaleDateString('es-ES', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })
+                : '—'}
+            </p>
+          </div>
 
           {/* Alerta Crítica */}
           {assessment.hasCriticalAlert && criticalResponse && (
