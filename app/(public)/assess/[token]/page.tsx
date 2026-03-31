@@ -309,7 +309,7 @@ export default function AssessmentPage() {
               </p>
             )}
 
-            <div className="space-y-2 sm:space-y-3">
+            <div key={currentQuestion} className="space-y-2 sm:space-y-3">
               {responseOptions.map((option) => (
                 <button
                   key={option.value}
