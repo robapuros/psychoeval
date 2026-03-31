@@ -134,6 +134,20 @@ export async function GET(
       };
     });
 
+    // Normalizar preguntas (manejar diferentes estructuras)
+    let normalizedQuestions: any[] = [];
+    if ('sections' in instrumentData) {
+      // MEC: extraer preguntas de secciones
+      for (const section of (instrumentData as any).sections) {
+        if (section.items) {
+          normalizedQuestions.push(...section.items);
+        }
+      }
+    } else if (Array.isArray((instrumentData as any).questions)) {
+      // Estructura directa con array de questions
+      normalizedQuestions = (instrumentData as any).questions;
+    }
+
     return NextResponse.json({
       assessment: {
         id: assessment.id,
@@ -158,6 +172,8 @@ export async function GET(
         category: instrumentData.category,
         description: instrumentData.description,
         scoring: instrumentData.scoring,
+        questions: normalizedQuestions,
+        responseOptions: (instrumentData as any).responseOptions || null,
       },
     });
   } catch (error) {
