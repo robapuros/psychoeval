@@ -434,6 +434,7 @@ export default function PatientsPage() {
       {showSendModal && selectedPatient && (
         <SendAssessmentModal
           patient={selectedPatient}
+          professionalName={session?.user?.name || 'tu doctor/a'}
           onClose={() => {
             setShowSendModal(false);
             setSelectedPatient(null);
@@ -577,10 +578,12 @@ function CreatePatientModal({ onClose, onSuccess }: { onClose: () => void; onSuc
 // Modal: Enviar Evaluación
 function SendAssessmentModal({
   patient,
+  professionalName,
   onClose,
   onSuccess,
 }: {
   patient: Patient;
+  professionalName: string;
   onClose: () => void;
   onSuccess: () => void;
 }) {
@@ -665,11 +668,8 @@ function SendAssessmentModal({
     // Limpiar número de teléfono (quitar espacios, guiones)
     const cleanPhone = patient.phone.replace(/[^0-9+]/g, '');
     
-    // Obtener nombre del profesional (de la sesión)
-    const professionalName = 'tu doctor/a'; // TODO: obtener del contexto de sesión
-    
-    // Mensaje template
-    const message = `Hola,
+    // Mensaje template personalizado
+    const message = `Hola ${patient.fullName},
 
 Tu Dr./Dra. ${professionalName} te ha enviado el siguiente cuestionario:
 ${generatedLink}

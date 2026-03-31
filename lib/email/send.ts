@@ -61,7 +61,7 @@ export async function sendPatientInvitation(params: SendPatientInvitationParams)
 </head>
 <body>
   <div class="container">
-    <p>Hola,</p>
+    <p>Hola ${params.patientName},</p>
     
     <p>Tu Dr./Dra. <strong>${params.professionalName}</strong> te ha enviado el siguiente cuestionario:</p>
     
