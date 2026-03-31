@@ -46,17 +46,45 @@ export async function sendPatientInvitation(params: SendPatientInvitationParams)
   }
 
   try {
+    // Simple HTML template
+    const htmlContent = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .link { color: #185FA5; text-decoration: none; word-break: break-all; }
+    .footer { margin-top: 30px; font-size: 12px; color: #888; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <p>Hola,</p>
+    
+    <p>Tu Dr./Dra. <strong>${params.professionalName}</strong> te ha enviado el siguiente cuestionario:</p>
+    
+    <p><a href="${params.assessmentUrl}" class="link">${params.assessmentUrl}</a></p>
+    
+    <p>Es importante que lo contestes antes de la próxima consulta.</p>
+    
+    <p>Un saludo</p>
+    
+    <div class="footer">
+      <p>Este enlace expira en 7 días.</p>
+      <p>PsicoSnap - Plataforma de evaluación psicológica</p>
+    </div>
+  </div>
+</body>
+</html>
+    `;
+
     const { data, error } = await resend.emails.send({
       from: emailConfig.from,
       to: params.to,
-      subject: `📋 Cuestionario de evaluación - ${params.instrumentName}`,
-      react: PatientInvitationEmail({
-        patientName: params.patientName,
-        professionalName: params.professionalName,
-        instrumentName: params.instrumentName,
-        assessmentUrl: params.assessmentUrl,
-        expiresAt: params.expiresAt,
-      }),
+      subject: `${params.professionalName} te ha enviado un cuestionario`,
+      html: htmlContent,
     });
 
     if (error) {

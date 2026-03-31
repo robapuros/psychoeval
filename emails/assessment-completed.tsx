@@ -113,7 +113,7 @@ AssessmentCompletedEmail.PreviewProps = {
   severity: 'Moderadamente severa',
   severityColor: '#BA7517',
   hasCriticalAlert: false,
-  resultsUrl: 'https://psicoevalua.com/dashboard/patients/123/assessments/abc',
+  resultsUrl: 'https://psicosnap.com/dashboard/patients/123/assessments/abc',
 } as AssessmentCompletedEmailProps;
 
 export default AssessmentCompletedEmail;

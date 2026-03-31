@@ -90,7 +90,7 @@ PatientInvitationEmail.PreviewProps = {
   patientName: 'Ana García',
   professionalName: 'Dr. Carlos Rodríguez',
   instrumentName: 'PHQ-9 - Cuestionario de Salud del Paciente',
-  assessmentUrl: 'https://psicoevalua.com/assess/abc123',
+  assessmentUrl: 'https://psicosnap.com/assess/abc123',
   expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
 } as PatientInvitationEmailProps;
 

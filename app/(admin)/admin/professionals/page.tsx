@@ -55,7 +55,7 @@ export default function AdminProfessionalsPage() {
           <div className="grid grid-cols-[2fr_1.5fr_1fr_1fr_80px] gap-4 px-3.5 py-2 border-b border-[rgba(0,0,0,0.08)] items-center hover:bg-[#F1EFE8] transition-colors cursor-pointer">
             <div>
               <div className="text-[11px] font-semibold">Dr. Juan Pérez García</div>
-              <div className="text-[9px] font-mono text-[#888780] mt-0.5">psicologo@psicoevalua.com</div>
+              <div className="text-[9px] font-mono text-[#888780] mt-0.5">psicologo@psicosnap.com</div>
             </div>
             <span className="text-[11px] text-[#5F5E5A]">Psicología Clínica</span>
             <span className="text-[11px] font-mono font-semibold">23</span>
@@ -70,7 +70,7 @@ export default function AdminProfessionalsPage() {
           <div className="grid grid-cols-[2fr_1.5fr_1fr_1fr_80px] gap-4 px-3.5 py-2 border-b border-[rgba(0,0,0,0.08)] items-center hover:bg-[#F1EFE8] transition-colors cursor-pointer">
             <div>
               <div className="text-[11px] font-semibold">Dra. María López Torres</div>
-              <div className="text-[9px] font-mono text-[#888780] mt-0.5">maria.lopez@psicoevalua.com</div>
+              <div className="text-[9px] font-mono text-[#888780] mt-0.5">maria.lopez@psicosnap.com</div>
             </div>
             <span className="text-[11px] text-[#5F5E5A]">Psicología Infantil</span>
             <span className="text-[11px] font-mono font-semibold">17</span>
@@ -85,7 +85,7 @@ export default function AdminProfessionalsPage() {
           <div className="grid grid-cols-[2fr_1.5fr_1fr_1fr_80px] gap-4 px-3.5 py-2 items-center hover:bg-[#F1EFE8] transition-colors cursor-pointer">
             <div>
               <div className="text-[11px] font-semibold">Dr. Carlos Ruiz Fernández</div>
-              <div className="text-[9px] font-mono text-[#888780] mt-0.5">carlos.ruiz@psicoevalua.com</div>
+              <div className="text-[9px] font-mono text-[#888780] mt-0.5">carlos.ruiz@psicosnap.com</div>
             </div>
             <span className="text-[11px] text-[#5F5E5A]">Psicoterapia</span>
             <span className="text-[11px] font-mono font-semibold">8</span>
@@ -124,7 +124,7 @@ export default function AdminProfessionalsPage() {
                 </label>
                 <input
                   type="email"
-                  placeholder="profesional@psicoevalua.com"
+                  placeholder="profesional@psicosnap.com"
                   className="w-full px-3 py-1.5 text-[12px] border border-[rgba(0,0,0,0.13)] rounded-md focus:outline-none focus:border-[#378ADD] focus:ring-2 focus:ring-[rgba(55,138,221,0.1)]"
                 />
               </div>

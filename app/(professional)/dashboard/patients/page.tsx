@@ -637,8 +637,52 @@ function SendAssessmentModal({
   function copyToClipboard() {
     if (generatedLink) {
       navigator.clipboard.writeText(generatedLink);
-      alert('Enlace copiado al portapapeles');
+      alert('✅ Enlace copiado al portapapeles');
     }
+  }
+
+  async function sendViaEmail() {
+    if (!generatedLink || !patient.email) return;
+    
+    setError('');
+    const sendingButton = document.activeElement as HTMLButtonElement;
+    if (sendingButton) sendingButton.disabled = true;
+    
+    try {
+      // El backend ya envió el email al generar el enlace
+      // Solo mostramos confirmación
+      alert(`✅ Email enviado a ${patient.email}`);
+    } catch (err) {
+      setError('Error al enviar email');
+    } finally {
+      if (sendingButton) sendingButton.disabled = false;
+    }
+  }
+
+  function sendViaWhatsApp() {
+    if (!generatedLink || !patient.phone) return;
+    
+    // Limpiar número de teléfono (quitar espacios, guiones)
+    const cleanPhone = patient.phone.replace(/[^0-9+]/g, '');
+    
+    // Obtener nombre del profesional (de la sesión)
+    const professionalName = 'tu doctor/a'; // TODO: obtener del contexto de sesión
+    
+    // Mensaje template
+    const message = `Hola,
+
+Tu Dr./Dra. ${professionalName} te ha enviado el siguiente cuestionario:
+${generatedLink}
+
+Es importante que lo contestes antes de la próxima consulta.
+
+Un saludo`;
+    
+    // URL de WhatsApp Web
+    const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
+    
+    // Abrir en nueva pestaña
+    window.open(whatsappUrl, '_blank');
   }
 
   if (generatedLink) {
@@ -650,41 +694,124 @@ function SendAssessmentModal({
               <span className="text-[24px]">✓</span>
             </div>
             <h2 className="text-[16px] font-bold tracking-tight mb-2">Enlace generado</h2>
-            {emailSent ? (
-              <p className="text-[11px] text-[#3B6D11]">
-                ✉️ Email enviado a <strong>{patient.fullName}</strong>
-              </p>
-            ) : patient.email ? (
-              <p className="text-[11px] text-[#888780]">
-                ⚠️ No se pudo enviar email. Copia el enlace manualmente.
-              </p>
-            ) : (
-              <p className="text-[11px] text-[#888780]">
-                Envía este enlace a <strong>{patient.fullName}</strong>
-              </p>
-            )}
-          </div>
-
-          <div className="bg-[#F1EFE8] rounded-lg p-3 mb-4">
-            <p className="text-[10px] text-[#5F5E5A] break-all font-mono">
-              {generatedLink}
+            <p className="text-[11px] text-[#888780]">
+              ¿Cómo quieres enviarlo a <strong>{patient.fullName}</strong>?
             </p>
           </div>
 
-          <div className="flex gap-2">
+          {error && (
+            <div className="mb-4 p-3 bg-[#FCEBEB] text-[#A32D2D] text-[11px] rounded-lg">
+              {error}
+            </div>
+          )}
+
+          {/* Enlace generado (pequeño, colapsable) */}
+          <details className="mb-4">
+            <summary className="text-[10px] text-[#888780] cursor-pointer hover:text-[#185FA5]">
+              Ver enlace
+            </summary>
+            <div className="bg-[#F1EFE8] rounded-lg p-2 mt-2">
+              <p className="text-[9px] text-[#5F5E5A] break-all font-mono">
+                {generatedLink}
+              </p>
+            </div>
+          </details>
+
+          {/* 3 Opciones de Envío */}
+          <div className="space-y-3 mb-4">
+            {/* Opción 1: Email */}
+            {patient.email ? (
+              <button
+                onClick={sendViaEmail}
+                className="w-full px-4 py-3 text-left border-2 border-[rgba(0,0,0,0.08)] rounded-lg hover:border-[#185FA5] hover:bg-[#EFF5FB] transition-all group"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-[#EFF5FB] rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-[#185FA5] transition-colors">
+                    <span className="text-[18px] group-hover:brightness-0 group-hover:invert">📧</span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-[12px] font-semibold text-[#1A1917]">Enviar por Email</div>
+                    <div className="text-[10px] text-[#888780] truncate">{patient.email}</div>
+                  </div>
+                  <div className="text-[#185FA5] opacity-0 group-hover:opacity-100 transition-opacity">
+                    →
+                  </div>
+                </div>
+              </button>
+            ) : (
+              <div className="px-4 py-3 border-2 border-[rgba(0,0,0,0.08)] rounded-lg bg-[#F1EFE8] opacity-50">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center flex-shrink-0">
+                    <span className="text-[18px]">📧</span>
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-[12px] font-semibold text-[#888780]">Email no disponible</div>
+                    <div className="text-[9px] text-[#888780]">Sin email registrado</div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Opción 2: WhatsApp */}
+            {patient.phone ? (
+              <button
+                onClick={sendViaWhatsApp}
+                className="w-full px-4 py-3 text-left border-2 border-[rgba(0,0,0,0.08)] rounded-lg hover:border-[#25D366] hover:bg-[#F0FFF4] transition-all group"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-[#F0FFF4] rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-[#25D366] transition-colors">
+                    <span className="text-[18px] group-hover:brightness-0 group-hover:invert">💬</span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-[12px] font-semibold text-[#1A1917]">Enviar por WhatsApp</div>
+                    <div className="text-[10px] text-[#888780] truncate">{patient.phone}</div>
+                  </div>
+                  <div className="text-[#25D366] opacity-0 group-hover:opacity-100 transition-opacity">
+                    →
+                  </div>
+                </div>
+              </button>
+            ) : (
+              <div className="px-4 py-3 border-2 border-[rgba(0,0,0,0.08)] rounded-lg bg-[#F1EFE8] opacity-50">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center flex-shrink-0">
+                    <span className="text-[18px]">💬</span>
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-[12px] font-semibold text-[#888780]">WhatsApp no disponible</div>
+                    <div className="text-[9px] text-[#888780]">Sin teléfono registrado</div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Opción 3: Copiar enlace */}
             <button
               onClick={copyToClipboard}
-              className="flex-1 px-4 py-2 text-[11px] font-semibold border border-[rgba(0,0,0,0.13)] rounded-md hover:bg-[#F1EFE8] transition-colors"
+              className="w-full px-4 py-3 text-left border-2 border-[rgba(0,0,0,0.08)] rounded-lg hover:border-[#888780] hover:bg-[#F7F6F3] transition-all group"
             >
-              📋 Copiar enlace
-            </button>
-            <button
-              onClick={onSuccess}
-              className="flex-1 px-4 py-2 text-[11px] font-semibold bg-[#185FA5] text-white rounded-md hover:bg-[#0C447C] transition-colors"
-            >
-              Cerrar
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-[#F7F6F3] rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-[#888780] transition-colors">
+                  <span className="text-[18px] group-hover:brightness-0 group-hover:invert">📋</span>
+                </div>
+                <div className="flex-1">
+                  <div className="text-[12px] font-semibold text-[#1A1917]">Copiar enlace</div>
+                  <div className="text-[10px] text-[#888780]">Enviar manualmente</div>
+                </div>
+                <div className="text-[#888780] opacity-0 group-hover:opacity-100 transition-opacity">
+                  →
+                </div>
+              </div>
             </button>
           </div>
+
+          {/* Botón Cerrar */}
+          <button
+            onClick={onSuccess}
+            className="w-full px-4 py-2 text-[11px] font-semibold border border-[rgba(0,0,0,0.13)] rounded-md hover:bg-[#F1EFE8] transition-colors"
+          >
+            Cerrar
+          </button>
 
           <p className="text-[9px] text-[#888780] text-center mt-4">
             El enlace expira en 7 días

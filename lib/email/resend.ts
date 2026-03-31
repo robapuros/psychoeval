@@ -8,6 +8,6 @@ export const resend = process.env.RESEND_API_KEY
 
 // Email sender configuration
 export const emailConfig = {
-  from: 'PsicoEvalúa <noreply@psicoevalua.com>',
-  replyTo: 'contacto@psicoevalua.com',
+  from: 'PsicoSnap <noreply@psicosnap.com>',
+  replyTo: 'soporte@psicosnap.com',
 };

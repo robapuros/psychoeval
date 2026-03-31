@@ -35,7 +35,7 @@
 
 ### Cuenta de Administrador
 ```
-Email: admin@psicoevalua.com
+Email: admin@psicosnap.com
 Contraseña: Admin1234!
 ```
 
@@ -44,7 +44,7 @@ Contraseña: Admin1234!
 
 ### Cuenta de Profesional (Prueba)
 ```
-Email: psicologo@psicoevalua.com
+Email: psicologo@psicosnap.com
 Contraseña: Test1234!
 ```
 
@@ -127,12 +127,12 @@ La actualización del esquema requirió eliminar datos de prueba previos.
 
 ### Como Administrador
 
-1. **Login** con `admin@psicoevalua.com`
+1. **Login** con `admin@psicosnap.com`
 2. Verás el panel de gestión de profesionales
 3. Haz clic en **"+ Nuevo profesional"**
 4. Completa el formulario:
    - Nombre: Dr./Dra. Nombre Apellidos
-   - Email: profesional@psicoevalua.com
+   - Email: profesional@psicosnap.com
    - Especialidad: Psicología Clínica
    - Contraseña: (temporal, deberá cambiarla)
 5. Haz clic en **"✓ Crear cuenta"**
@@ -214,7 +214,7 @@ La actualización del esquema requirió eliminar datos de prueba previos.
 ### No puedo iniciar sesión
 
 **Verifica:**
-1. Estás usando las nuevas credenciales (admin@psicoevalua.com o psicologo@psicoevalua.com)
+1. Estás usando las nuevas credenciales (admin@psicosnap.com o psicologo@psicosnap.com)
 2. La contraseña es correcta (Admin1234! o Test1234!)
 3. No hay espacios extras en el email
 

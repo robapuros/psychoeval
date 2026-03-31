@@ -129,7 +129,7 @@ CriticalAlertEmail.PreviewProps = {
   criticalItems: [9],
   alertMessage:
     'El paciente ha reportado pensamientos de que estaría mejor muerto/a o de hacerse daño de alguna manera. Se recomienda evaluación inmediata del riesgo suicida.',
-  resultsUrl: 'https://psicoevalua.com/dashboard/patients/123/assessments/abc',
+  resultsUrl: 'https://psicosnap.com/dashboard/patients/123/assessments/abc',
 } as CriticalAlertEmailProps;
 
 export default CriticalAlertEmail;
